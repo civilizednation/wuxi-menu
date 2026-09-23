@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>홍보각 · 경복궁 · 란조라면 메뉴 주문 (단일파일)</title>
+<title>홍보각 · 경복궁 · 란조라면 · 지스김밥 메뉴 주문 (단일파일)</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -1275,13 +1275,84 @@ const RESTAURANT_LJ = {
 
 </script>
 <script>
+// ============================================================
+//  지스김밥 (Ji's Café) 메뉴 데이터 (jis.js)
+// ------------------------------------------------------------
+//  [수정 방법]
+//  · 메뉴 추가   : items 배열 안에 아래 한 줄 추가
+//      { name: "메뉴명", cn: "中文名", price: 가격 }
+//  · 메뉴 삭제   : 해당 줄 삭제
+//  · 가격 변경   : price 숫자만 수정
+//  · cn(중국어)  : 선택 항목 — 없어도 동작, 있으면 이름 옆에 표시
+//  · 분류 설명   : note: "설명"  (분류 제목 아래 작게 표시, 생략 가능)
+//  · 새 분류 추가: categories 배열에 { name: "분류명", cn: "中文", items: [...] } 추가
+// ============================================================
+
+const RESTAURANT_JIS = {
+  id: "jis",
+  name: "지스김밥",
+  mark: "紫",              // 로고 글자 (카드·아이콘에 표시)
+  tagline: "김밥 · 밥버거 · 분식 · Ji's Café",
+  currency: "元",          // 화폐 단위 (예: "원", "¥", "元")
+  accent: "#2f7d4f",        // 브랜드 컬러 (버튼·강조색)
+  accent2: "#e0b83c",       // 그라데이션용 보조 컬러
+
+  categories: [
+    {
+      name: "김밥",
+      cn: "紫菜包饭",
+      items: [
+        { name: "불고기김밥", cn: "烤牛肉包饭", price: 25 },
+        { name: "베이컨김치김밥", cn: "培根泡菜包饭", price: 23 },
+        { name: "베이컨김밥", cn: "培根包饭", price: 20 },
+        { name: "참치김밥", cn: "金枪鱼包饭", price: 20 },
+        { name: "스팸김밥", cn: "火腿包饭", price: 18 },
+        { name: "김치김밥", cn: "泡菜包饭", price: 18 },
+        { name: "치즈김밥", cn: "芝士包饭", price: 18 },
+        { name: "Ji's김밥", cn: "蔬菜包饭", price: 15 },
+      ],
+    },
+    {
+      name: "삼각김밥",
+      cn: "三角包饭",
+      items: [
+        { name: "불고기삼각", cn: "烤牛肉三角", price: 10 },
+        { name: "참치마요삼각", cn: "金枪鱼沙拉三角", price: 8 },
+        { name: "참치김치삼각", cn: "金枪鱼泡菜三角", price: 8 },
+      ],
+    },
+    {
+      name: "밥버거",
+      cn: "饭煲",
+      items: [
+        { name: "스팸김치 밥버거", cn: "火腿泡菜", price: 20 },
+        { name: "스팸계란 밥버거", cn: "火腿鸡蛋", price: 20 },
+        { name: "불고기 밥버거", cn: "烤牛肉", price: 20 },
+        { name: "참치김치 밥버거", cn: "金枪鱼泡菜", price: 18 },
+      ],
+    },
+    {
+      name: "분식",
+      cn: "小吃",
+      items: [
+        { name: "떡볶이", cn: "炒年糕", price: 12 },
+        { name: "찹순대", cn: "米肠", price: 30 },
+        { name: "오뎅 (대)", cn: "鱼饼 (大)", price: 10 },
+        { name: "오뎅 (소)", cn: "鱼饼 (小)", price: 5 },
+      ],
+    },
+  ],
+};
+
+</script>
+<script>
 "use strict";
 
 /* ============================================================
    앱 상태
    ============================================================ */
-const RESTAURANTS = [RESTAURANT_HBG, RESTAURANT_GBG, RESTAURANT_LJ];
-let currentId = null;              // "hbg" | "gbg" | "lj"
+const RESTAURANTS = [RESTAURANT_HBG, RESTAURANT_GBG, RESTAURANT_LJ, RESTAURANT_JIS];
+let currentId = null;              // "hbg" | "gbg" | "lj" | "jis"
 // 저장된 카트에 새 음식점 키가 없으면 보충 (기존 사용자 호환)
 const carts = load("menu-carts", {});
 for (const r of RESTAURANTS) if (!carts[r.id]) carts[r.id] = {};
