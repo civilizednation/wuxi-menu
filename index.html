@@ -3,16 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>홍보각 · 경복궁 메뉴 주문 (단일파일)</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="theme-color" content="#c8161d">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="홍보각 메뉴">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>홍보각 · 경복궁 · 란조라면 메뉴 주문 (단일파일)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -285,6 +276,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   transform: rotate(45deg);
 }
 .cat-note { font-size: 12px; color: var(--muted); font-weight: 500; }
+.cat-cn { font-size: 13px; font-weight: 400; color: var(--muted); }
 
 .menu-list { display: grid; gap: 8px; }
 
@@ -308,6 +300,17 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   overflow-wrap: break-word;
 }
 .item-name.dim { color: var(--muted); }
+.item-cn {
+  font-size: 12.5px; font-weight: 400;
+  color: var(--muted);
+  margin-left: 6px;
+}
+.item-desc {
+  font-size: 12px; font-weight: 400;
+  color: var(--muted);
+  margin-top: 2px;
+  line-height: 1.35;
+}
 .item-price {
   font-size: 14px; font-weight: 700; color: var(--muted);
   margin-top: 2px;
@@ -468,6 +471,11 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 .cart-item .ci-info { flex: 1; min-width: 0; }
 .cart-item .ci-name { font-size: 14px; font-weight: 700; overflow-wrap: break-word; }
+.cart-item .ci-cn {
+  font-size: 12.5px; font-weight: 400;
+  color: var(--muted);
+  margin-left: 5px;
+}
 .cart-item .ci-sub { font-size: 12.5px; color: var(--muted); margin-top: 1px; }
 .cart-item .stepper { border-radius: 11px; }
 .cart-item .stepper button { width: 36px; height: 38px; }
@@ -640,10 +648,11 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 //  홍보각 중화요리 메뉴 데이터 (hbg.js)
 // ------------------------------------------------------------
 //  [수정 방법]
-//  · 메뉴 추가   : items 배열 안에 { name: "메뉴명", price: 가격 } 한 줄 추가
+//  · 메뉴 추가   : items 배열 안에 { name: "메뉴명", cn: "中文", price: 가격 } 추가
 //  · 메뉴 삭제   : 해당 줄 삭제
 //  · 가격 변경   : price 숫자만 수정
 //  · 시가 메뉴   : price: "시가"  (주문 담기가 비활성화 됨)
+//  · cn(중국어)  : 선택 항목 — 없어도 동작, 있으면 이름 옆에 표시
 //  · 새 분류 추가: categories 배열에 { name: "분류명", items: [...] } 추가
 // ============================================================
 
@@ -660,182 +669,182 @@ const RESTAURANT_HBG = {
     {
       name: "주식류",
       items: [
-        { name: "짜장면 (보통)", price: 25 },
-        { name: "짜장면 (곱배기)", price: 30 },
-        { name: "짜장밥 (보통)", price: 25 },
-        { name: "짜장밥 (곱배기)", price: 30 },
-        { name: "간짜장 (보통)", price: 30 },
-        { name: "간짜장 (곱배기)", price: 35 },
-        { name: "삼선간짜장 (보통)", price: 40 },
-        { name: "삼선간짜장 (곱배기)", price: 45 },
-        { name: "삼선쟁반짜장 (보통)", price: 40 },
-        { name: "삼선쟁반짜장 (곱배기)", price: 45 },
-        { name: "삼선짬뽕 (보통)", price: 40 },
-        { name: "삼선짬뽕 (곱배기)", price: 45 },
-        { name: "삼선짬뽕밥 (보통)", price: 40 },
-        { name: "삼선짬뽕밥 (곱배기)", price: 45 },
-        { name: "홍보각황제짬뽕 (보통)", price: 60 },
-        { name: "홍보각황제짬뽕 (곱배기)", price: 65 },
-        { name: "홍보각황제짬뽕밥 (보통)", price: 60 },
-        { name: "홍보각황제짬뽕밥 (곱배기)", price: 65 },
-        { name: "차돌짬뽕 (보통)", price: 55 },
-        { name: "차돌짬뽕 (곱배기)", price: 60 },
-        { name: "차돌짬뽕밥 (보통)", price: 55 },
-        { name: "차돌짬뽕밥 (곱배기)", price: 60 },
-        { name: "제육짬뽕 (보통)", price: 45 },
-        { name: "제육짬뽕 (곱배기)", price: 50 },
-        { name: "제육짬뽕밥 (보통)", price: 45 },
-        { name: "제육짬뽕밥 (곱배기)", price: 50 },
-        { name: "속풀이짬뽕 (보통)", price: 45 },
-        { name: "속풀이짬뽕 (곱배기)", price: 50 },
-        { name: "속풀이짬뽕밥 (보통)", price: 45 },
-        { name: "속풀이짬뽕밥 (곱배기)", price: 50 },
-        { name: "고추짬뽕 (보통)", price: 45 },
-        { name: "고추짬뽕 (곱배기)", price: 50 },
-        { name: "고추짬뽕밥 (보통)", price: 45 },
-        { name: "고추짬뽕밥 (곱배기)", price: 50 },
-        { name: "콩나물짬뽕 (보통)", price: 45 },
-        { name: "콩나물짬뽕 (곱배기)", price: 50 },
-        { name: "콩나물짬뽕밥 (보통)", price: 45 },
-        { name: "콩나물짬뽕밥 (곱배기)", price: 50 },
-        { name: "볶음짬뽕 (보통)", price: 45 },
-        { name: "볶음짬뽕 (곱배기)", price: 50 },
-        { name: "굴짬뽕 (보통)", price: 45 },
-        { name: "굴짬뽕 (곱배기)", price: 50 },
-        { name: "백짬뽕 (보통)", price: 40 },
-        { name: "백짬뽕 (곱배기)", price: 45 },
-        { name: "백짬뽕밥 (보통)", price: 40 },
-        { name: "백짬뽕밥 (곱배기)", price: 45 },
-        { name: "삼선우동 (보통)", price: 40 },
-        { name: "삼선우동 (곱배기)", price: 45 },
-        { name: "삼선울면 (보통)", price: 40 },
-        { name: "삼선울면 (곱배기)", price: 45 },
-        { name: "삼선볶음밥", price: 40 },
-        { name: "새우볶음밥", price: 35 },
-        { name: "잡탕밥", price: 50 },
-        { name: "홍보각특밥", price: 45 },
-        { name: "잡채덮밥", price: 35 },
-        { name: "고추잡채밥", price: 45 },
-        { name: "김치볶음밥", price: 35 },
-        { name: "제육덮밥", price: 40 },
-        { name: "군만두", price: 25 },
-        { name: "공기밥", price: 5 },
+        { name: "짜장면 (보통)", cn: "炸酱面 (中)", price: 25 },
+        { name: "짜장면 (곱배기)", cn: "炸酱面 (大)", price: 30 },
+        { name: "짜장밥 (보통)", cn: "炸酱饭 (中)", price: 25 },
+        { name: "짜장밥 (곱배기)", cn: "炸酱饭 (大)", price: 30 },
+        { name: "간짜장 (보통)", cn: "干炸酱面 (中)", price: 30 },
+        { name: "간짜장 (곱배기)", cn: "干炸酱面 (大)", price: 35 },
+        { name: "삼선간짜장 (보통)", cn: "三鲜干炸酱面 (中)", price: 40 },
+        { name: "삼선간짜장 (곱배기)", cn: "三鲜干炸酱面 (大)", price: 45 },
+        { name: "삼선쟁반짜장 (보통)", cn: "三鲜大盘酱炒面 (中)", price: 40 },
+        { name: "삼선쟁반짜장 (곱배기)", cn: "三鲜大盘酱炒面 (大)", price: 45 },
+        { name: "삼선짬뽕 (보통)", cn: "海鲜辣汤面 (中)", price: 40 },
+        { name: "삼선짬뽕 (곱배기)", cn: "海鲜辣汤面 (大)", price: 45 },
+        { name: "삼선짬뽕밥 (보통)", cn: "海鲜辣汤饭 (中)", price: 40 },
+        { name: "삼선짬뽕밥 (곱배기)", cn: "海鲜辣汤饭 (大)", price: 45 },
+        { name: "홍보각황제짬뽕 (보통)", cn: "洪宝阁皇帝辣汤面 (中)", price: 60 },
+        { name: "홍보각황제짬뽕 (곱배기)", cn: "洪宝阁皇帝辣汤面 (大)", price: 65 },
+        { name: "홍보각황제짬뽕밥 (보통)", cn: "洪宝阁皇帝辣汤饭 (中)", price: 60 },
+        { name: "홍보각황제짬뽕밥 (곱배기)", cn: "洪宝阁皇帝辣汤饭 (大)", price: 65 },
+        { name: "차돌짬뽕 (보통)", cn: "胸叉肉辣汤面 (中)", price: 55 },
+        { name: "차돌짬뽕 (곱배기)", cn: "胸叉肉辣汤面 (大)", price: 60 },
+        { name: "차돌짬뽕밥 (보통)", cn: "胸叉肉辣汤饭 (中)", price: 55 },
+        { name: "차돌짬뽕밥 (곱배기)", cn: "胸叉肉辣汤饭 (大)", price: 60 },
+        { name: "제육짬뽕 (보통)", cn: "猪肉辣汤面 (中)", price: 45 },
+        { name: "제육짬뽕 (곱배기)", cn: "猪肉辣汤面 (大)", price: 50 },
+        { name: "제육짬뽕밥 (보통)", cn: "猪肉辣汤饭 (中)", price: 45 },
+        { name: "제육짬뽕밥 (곱배기)", cn: "猪肉辣汤饭 (大)", price: 50 },
+        { name: "속풀이짬뽕 (보통)", cn: "解酒辣汤面 (中)", price: 45 },
+        { name: "속풀이짬뽕 (곱배기)", cn: "解酒辣汤面 (大)", price: 50 },
+        { name: "속풀이짬뽕밥 (보통)", cn: "解酒辣汤饭 (中)", price: 45 },
+        { name: "속풀이짬뽕밥 (곱배기)", cn: "解酒辣汤饭 (大)", price: 50 },
+        { name: "고추짬뽕 (보통)", cn: "辣椒辣汤面 (中)", price: 45 },
+        { name: "고추짬뽕 (곱배기)", cn: "辣椒辣汤面 (大)", price: 50 },
+        { name: "고추짬뽕밥 (보통)", cn: "辣椒辣汤饭 (中)", price: 45 },
+        { name: "고추짬뽕밥 (곱배기)", cn: "辣椒辣汤饭 (大)", price: 50 },
+        { name: "콩나물짬뽕 (보통)", cn: "豆芽辣汤面 (中)", price: 45 },
+        { name: "콩나물짬뽕 (곱배기)", cn: "豆芽辣汤面 (大)", price: 50 },
+        { name: "콩나물짬뽕밥 (보통)", cn: "豆芽辣汤饭 (中)", price: 45 },
+        { name: "콩나물짬뽕밥 (곱배기)", cn: "豆芽辣汤饭 (大)", price: 50 },
+        { name: "볶음짬뽕 (보통)", cn: "海鲜辣炒面 (中)", price: 45 },
+        { name: "볶음짬뽕 (곱배기)", cn: "海鲜辣炒面 (大)", price: 50 },
+        { name: "굴짬뽕 (보통)", cn: "生蚝汤面 (中)", price: 45 },
+        { name: "굴짬뽕 (곱배기)", cn: "生蚝汤面 (大)", price: 50 },
+        { name: "백짬뽕 (보통)", cn: "白汤面 (中)", price: 40 },
+        { name: "백짬뽕 (곱배기)", cn: "白汤面 (大)", price: 45 },
+        { name: "백짬뽕밥 (보통)", cn: "白汤饭 (中)", price: 40 },
+        { name: "백짬뽕밥 (곱배기)", cn: "白汤饭 (大)", price: 45 },
+        { name: "삼선우동 (보통)", cn: "海鲜乌冬面 (中)", price: 40 },
+        { name: "삼선우동 (곱배기)", cn: "海鲜乌冬面 (大)", price: 45 },
+        { name: "삼선울면 (보통)", cn: "海鲜打卤面 (中)", price: 40 },
+        { name: "삼선울면 (곱배기)", cn: "海鲜打卤面 (大)", price: 45 },
+        { name: "삼선볶음밥", cn: "三鲜炒饭", price: 40 },
+        { name: "새우볶음밥", cn: "虾仁炒饭", price: 35 },
+        { name: "잡탕밥", cn: "全家福盖饭", price: 50 },
+        { name: "홍보각특밥", cn: "洪宝阁特饭", price: 45 },
+        { name: "잡채덮밥", cn: "炒粉丝盖饭", price: 35 },
+        { name: "고추잡채밥", cn: "青椒肉丝盖饭", price: 45 },
+        { name: "김치볶음밥", cn: "泡菜炒饭", price: 35 },
+        { name: "제육덮밥", cn: "五花肉盖浇饭", price: 40 },
+        { name: "군만두", cn: "煎饺", price: 25 },
+        { name: "공기밥", cn: "米饭", price: 5 },
       ],
     },
     {
       name: "중화요리",
       items: [
-        { name: "탕수육 (소)", price: 60 },
-        { name: "탕수육 (대)", price: 80 },
-        { name: "찹쌀탕수육 (소)", price: 70 },
-        { name: "찹쌀탕수육 (대)", price: 90 },
-        { name: "홍보각탕수육 (소)", price: 65 },
-        { name: "홍보각탕수육 (대)", price: 85 },
-        { name: "사천탕수육 (소)", price: 70 },
-        { name: "사천탕수육 (대)", price: 90 },
-        { name: "해물잡채", price: 55 },
-        { name: "팔보채 (소)", price: 70 },
-        { name: "팔보채 (대)", price: 90 },
-        { name: "전가복 (소)", price: 160 },
-        { name: "전가복 (대)", price: 200 },
-        { name: "양장피 (소)", price: 70 },
-        { name: "양장피 (대)", price: 90 },
-        { name: "깐풍기 (소)", price: 70 },
-        { name: "깐풍기 (대)", price: 90 },
-        { name: "깐풍새우 (소)", price: 70 },
-        { name: "깐풍새우 (대)", price: 90 },
-        { name: "깐소새우 (소)", price: 70 },
-        { name: "깐소새우 (대)", price: 90 },
-        { name: "크림새우 (소)", price: 70 },
-        { name: "크림새우 (대)", price: 90 },
-        { name: "고추잡채 & 꽃빵 (소)", price: 70 },
-        { name: "고추잡채 & 꽃빵 (대)", price: 90 },
-        { name: "유산슬 (소)", price: 70 },
-        { name: "유산슬 (대)", price: 90 },
-        { name: "해물누룽지탕", price: 80 },
-        { name: "술국", price: 70 },
-        { name: "라조기 (소)", price: 70 },
-        { name: "라조기 (대)", price: 90 },
+        { name: "탕수육 (소)", cn: "糖醋猪肉 (小)", price: 60 },
+        { name: "탕수육 (대)", cn: "糖醋猪肉 (大)", price: 80 },
+        { name: "찹쌀탕수육 (소)", cn: "锅包肉 (小)", price: 70 },
+        { name: "찹쌀탕수육 (대)", cn: "锅包肉 (大)", price: 90 },
+        { name: "홍보각탕수육 (소)", cn: "洪宝阁糖醋肉 (小)", price: 65 },
+        { name: "홍보각탕수육 (대)", cn: "洪宝阁糖醋肉 (大)", price: 85 },
+        { name: "사천탕수육 (소)", cn: "四川糖醋肉 (小)", price: 70 },
+        { name: "사천탕수육 (대)", cn: "四川糖醋肉 (大)", price: 90 },
+        { name: "해물잡채", cn: "海鲜炒粉丝", price: 55 },
+        { name: "팔보채 (소)", cn: "八宝菜 (小)", price: 70 },
+        { name: "팔보채 (대)", cn: "八宝菜 (大)", price: 90 },
+        { name: "전가복 (소)", cn: "全家福 (小)", price: 160 },
+        { name: "전가복 (대)", cn: "全家福 (大)", price: 200 },
+        { name: "양장피 (소)", cn: "两张皮 (小)", price: 70 },
+        { name: "양장피 (대)", cn: "两张皮 (大)", price: 90 },
+        { name: "깐풍기 (소)", cn: "干烹鸡 (小)", price: 70 },
+        { name: "깐풍기 (대)", cn: "干烹鸡 (大)", price: 90 },
+        { name: "깐풍새우 (소)", cn: "干烹虾 (小)", price: 70 },
+        { name: "깐풍새우 (대)", cn: "干烹虾 (大)", price: 90 },
+        { name: "깐소새우 (소)", cn: "干烧虾 (小)", price: 70 },
+        { name: "깐소새우 (대)", cn: "干烧虾 (大)", price: 90 },
+        { name: "크림새우 (소)", cn: "奶油虾 (小)", price: 70 },
+        { name: "크림새우 (대)", cn: "奶油虾 (大)", price: 90 },
+        { name: "고추잡채 & 꽃빵 (소)", cn: "青椒肉丝&花卷 (小)", price: 70 },
+        { name: "고추잡채 & 꽃빵 (대)", cn: "青椒肉丝&花卷 (大)", price: 90 },
+        { name: "유산슬 (소)", cn: "溜三丝 (小)", price: 70 },
+        { name: "유산슬 (대)", cn: "溜三丝 (大)", price: 90 },
+        { name: "해물누룽지탕", cn: "海鲜锅巴汤", price: 80 },
+        { name: "술국", cn: "酒汤", price: 70 },
+        { name: "라조기 (소)", cn: "辣子鸡 (小)", price: 70 },
+        { name: "라조기 (대)", cn: "辣子鸡 (大)", price: 90 },
       ],
     },
     {
       name: "얼큰얼큰류",
       items: [
-        { name: "불짜장 (보통)", price: 35 },
-        { name: "불짜장 (곱배기)", price: 40 },
-        { name: "삼선쟁반불짜장 (보통)", price: 45 },
-        { name: "삼선쟁반불짜장 (곱배기)", price: 50 },
-        { name: "삼선불짬뽕 (보통)", price: 45 },
-        { name: "삼선불짬뽕 (곱배기)", price: 50 },
-        { name: "삼선불짬뽕밥 (보통)", price: 45 },
-        { name: "삼선불짬뽕밥 (곱배기)", price: 50 },
-        { name: "황제불짬뽕 (보통)", price: 65 },
-        { name: "황제불짬뽕 (곱배기)", price: 70 },
-        { name: "황제불짬뽕밥 (보통)", price: 65 },
-        { name: "황제불짬뽕밥 (곱배기)", price: 70 },
-        { name: "차돌불짬뽕 (보통)", price: 60 },
-        { name: "차돌불짬뽕 (곱배기)", price: 65 },
-        { name: "차돌불짬뽕밥 (보통)", price: 60 },
-        { name: "차돌불짬뽕밥 (곱배기)", price: 65 },
-        { name: "제육불짬뽕 (보통)", price: 50 },
-        { name: "제육불짬뽕 (곱배기)", price: 55 },
-        { name: "제육불짬뽕밥 (보통)", price: 50 },
-        { name: "제육불짬뽕밥 (곱배기)", price: 55 },
-        { name: "속풀이불짬뽕 (보통)", price: 50 },
-        { name: "속풀이불짬뽕 (곱배기)", price: 55 },
-        { name: "속풀이불짬뽕밥 (보통)", price: 50 },
-        { name: "속풀이불짬뽕밥 (곱배기)", price: 55 },
-        { name: "콩나물불짬뽕 (보통)", price: 50 },
-        { name: "콩나물불짬뽕 (곱배기)", price: 55 },
-        { name: "콩나물불짬뽕밥 (보통)", price: 50 },
-        { name: "콩나물불짬뽕밥 (곱배기)", price: 55 },
+        { name: "불짜장 (보통)", cn: "火辣炸酱面 (中)", price: 35 },
+        { name: "불짜장 (곱배기)", cn: "火辣炸酱面 (大)", price: 40 },
+        { name: "삼선쟁반불짜장 (보통)", cn: "三鲜火辣酱炒面 (中)", price: 45 },
+        { name: "삼선쟁반불짜장 (곱배기)", cn: "三鲜火辣酱炒面 (大)", price: 50 },
+        { name: "삼선불짬뽕 (보통)", cn: "火辣海鲜辣汤面 (中)", price: 45 },
+        { name: "삼선불짬뽕 (곱배기)", cn: "火辣海鲜辣汤面 (大)", price: 50 },
+        { name: "삼선불짬뽕밥 (보통)", cn: "火辣海鲜辣汤饭 (中)", price: 45 },
+        { name: "삼선불짬뽕밥 (곱배기)", cn: "火辣海鲜辣汤饭 (大)", price: 50 },
+        { name: "황제불짬뽕 (보통)", cn: "火辣皇帝辣汤面 (中)", price: 65 },
+        { name: "황제불짬뽕 (곱배기)", cn: "火辣皇帝辣汤面 (大)", price: 70 },
+        { name: "황제불짬뽕밥 (보통)", cn: "火辣皇帝辣汤饭 (中)", price: 65 },
+        { name: "황제불짬뽕밥 (곱배기)", cn: "火辣皇帝辣汤饭 (大)", price: 70 },
+        { name: "차돌불짬뽕 (보통)", cn: "火辣胸叉肉辣汤面 (中)", price: 60 },
+        { name: "차돌불짬뽕 (곱배기)", cn: "火辣胸叉肉辣汤面 (大)", price: 65 },
+        { name: "차돌불짬뽕밥 (보통)", cn: "火辣胸叉肉辣汤饭 (中)", price: 60 },
+        { name: "차돌불짬뽕밥 (곱배기)", cn: "火辣胸叉肉辣汤饭 (大)", price: 65 },
+        { name: "제육불짬뽕 (보통)", cn: "火辣猪肉辣汤面 (中)", price: 50 },
+        { name: "제육불짬뽕 (곱배기)", cn: "火辣猪肉辣汤面 (大)", price: 55 },
+        { name: "제육불짬뽕밥 (보통)", cn: "火辣猪肉辣汤饭 (中)", price: 50 },
+        { name: "제육불짬뽕밥 (곱배기)", cn: "火辣猪肉辣汤饭 (大)", price: 55 },
+        { name: "속풀이불짬뽕 (보통)", cn: "火辣解酒辣汤面 (中)", price: 50 },
+        { name: "속풀이불짬뽕 (곱배기)", cn: "火辣解酒辣汤面 (大)", price: 55 },
+        { name: "속풀이불짬뽕밥 (보통)", cn: "火辣解酒辣汤饭 (中)", price: 50 },
+        { name: "속풀이불짬뽕밥 (곱배기)", cn: "火辣解酒辣汤饭 (大)", price: 55 },
+        { name: "콩나물불짬뽕 (보통)", cn: "火辣豆芽辣汤面 (中)", price: 50 },
+        { name: "콩나물불짬뽕 (곱배기)", cn: "火辣豆芽辣汤面 (大)", price: 55 },
+        { name: "콩나물불짬뽕밥 (보통)", cn: "火辣豆芽辣汤饭 (中)", price: 50 },
+        { name: "콩나물불짬뽕밥 (곱배기)", cn: "火辣豆芽辣汤饭 (大)", price: 55 },
       ],
     },
     {
       name: "여름별미메뉴",
       items: [
-        { name: "냉짬뽕 (보통)", price: 45 },
-        { name: "냉짬뽕 (곱배기)", price: 50 },
-        { name: "중화냉면 (보통)", price: 45 },
-        { name: "중화냉면 (곱배기)", price: 50 },
-        { name: "콩국수 (보통)", price: 35 },
-        { name: "콩국수 (곱배기)", price: 40 },
+        { name: "냉짬뽕 (보통)", cn: "凉辣汤面 (中)", price: 45 },
+        { name: "냉짬뽕 (곱배기)", cn: "凉辣汤面 (大)", price: 50 },
+        { name: "중화냉면 (보통)", cn: "中华冷面 (中)", price: 45 },
+        { name: "중화냉면 (곱배기)", cn: "中华冷面 (大)", price: 50 },
+        { name: "콩국수 (보통)", cn: "豆浆面 (中)", price: 35 },
+        { name: "콩국수 (곱배기)", cn: "豆浆面 (大)", price: 40 },
       ],
     },
     {
       name: "2인세트메뉴",
       items: [
-        { name: "1세트 (탕수육 + 짜장면 + 짜장면)", price: 105 },
-        { name: "2세트 (탕수육 + 짜장면 + 짬뽕)", price: 120 },
-        { name: "3세트 (탕수육 + 짬뽕 + 짬뽕)", price: 135 },
+        { name: "1세트 (탕수육 + 짜장면 + 짜장면)", cn: "糖醋肉+炸酱面+炸酱面", price: 105 },
+        { name: "2세트 (탕수육 + 짜장면 + 짬뽕)", cn: "糖醋肉+炸酱面+海鲜辣汤面", price: 120 },
+        { name: "3세트 (탕수육 + 짬뽕 + 짬뽕)", cn: "糖醋肉+海鲜辣汤面+海鲜辣汤面", price: 135 },
       ],
     },
     {
       name: "반반세트",
       items: [
-        { name: "반반 1 (짬뽕 & 짜장면)", price: 40 },
-        { name: "반반 2 (탕수육 & 짬뽕)", price: 50 },
-        { name: "반반 3 (탕수육 & 짜장면)", price: 50 },
+        { name: "반반 1 (짬뽕 & 짜장면)", cn: "辣汤面&炸酱面", price: 40 },
+        { name: "반반 2 (탕수육 & 짬뽕)", cn: "糖醋肉&辣汤面", price: 50 },
+        { name: "반반 3 (탕수육 & 짜장면)", cn: "糖醋肉&炸酱面", price: 50 },
       ],
     },
     {
       name: "주수류",
       items: [
-        { name: "신진로", price: 40 },
-        { name: "참이슬", price: 35 },
-        { name: "처음처럼", price: 35 },
-        { name: "한라산", price: 35 },
-        { name: "막걸리", price: 45 },
-        { name: "청도맥주", price: 10 },
-        { name: "청도순생", price: 15 },
-        { name: "설원 (5년)", price: 65 },
-        { name: "설원 (10년)", price: 80 },
-        { name: "한국음료수", price: 10 },
-        { name: "콜라 (캔)", price: 5 },
-        { name: "콜라 (대병)", price: 15 },
-        { name: "사이다 (캔)", price: 5 },
-        { name: "사이다 (대병)", price: 15 },
-        { name: "홍초", price: 15 },
+        { name: "신진로", cn: "新真露", price: 40 },
+        { name: "참이슬", cn: "真露", price: 35 },
+        { name: "처음처럼", cn: "初饮初乐", price: 35 },
+        { name: "한라산", cn: "汉拿山", price: 35 },
+        { name: "막걸리", cn: "米酒", price: 45 },
+        { name: "청도맥주", cn: "青岛啤酒", price: 10 },
+        { name: "청도순생", cn: "青岛纯生", price: 15 },
+        { name: "설원 (5년)", cn: "雪原", price: 65 },
+        { name: "설원 (10년)", cn: "雪原", price: 80 },
+        { name: "한국음료수", cn: "韩国饮料", price: 10 },
+        { name: "콜라 (캔)", cn: "可乐", price: 5 },
+        { name: "콜라 (대병)", cn: "可乐", price: 15 },
+        { name: "사이다 (캔)", cn: "雪碧", price: 5 },
+        { name: "사이다 (대병)", cn: "雪碧", price: 15 },
+        { name: "홍초", cn: "红醋", price: 15 },
       ],
     },
   ],
@@ -847,10 +856,11 @@ const RESTAURANT_HBG = {
 //  경복궁 메뉴 데이터 (gbg.js)
 // ------------------------------------------------------------
 //  [수정 방법]
-//  · 메뉴 추가   : items 배열 안에 { name: "메뉴명", price: 가격 } 한 줄 추가
+//  · 메뉴 추가   : items 배열 안에 { name: "메뉴명", cn: "中文", price: 가격 } 추가
 //  · 메뉴 삭제   : 해당 줄 삭제
 //  · 가격 변경   : price 숫자만 수정
 //  · 시가 메뉴   : price: "시가"  (주문 담기가 비활성화 됨)
+//  · cn(중국어)  : 선택 항목 — 없어도 동작, 있으면 이름 옆에 표시
 //  · 분류 설명   : note: "설명"  (분류 제목 아래 작게 표시, 생략 가능)
 //  · 새 분류 추가: categories 배열에 { name: "분류명", items: [...] } 추가
 // ============================================================
@@ -867,192 +877,388 @@ const RESTAURANT_GBG = {
   categories: [
     {
       name: "쌈밥류",
+      cn: "包饭菜类",
       note: "모둠쌈 & 된장찌개 포함",
       items: [
-        { name: "보쌈쌈밥", price: 58 },
-        { name: "제육쌈밥", price: 58 },
-        { name: "건강돼지불고기쌈밥", price: 58 },
-        { name: "고등어정식쌈밥", price: 60 },
+        { name: "보쌈쌈밥", cn: "煮五花肉包饭", price: 58 },
+        { name: "제육쌈밥", cn: "猪肉包饭", price: 58 },
+        { name: "건강돼지불고기쌈밥", cn: "健康烤猪肉包饭", price: 58 },
+        { name: "고등어정식쌈밥", cn: "鲭鱼套餐包饭", price: 60 },
       ],
     },
     {
       name: "덮밥/볶음밥류",
+      cn: "盖饭/炒饭类",
       note: "배추된장국 포함",
       items: [
-        { name: "불고기덮밥", price: 40 },
-        { name: "제육덮밥", price: 40 },
-        { name: "오징어덮밥", price: 40 },
-        { name: "위샹로스덮밥", price: 40 },
-        { name: "칭죠로스덮밥", price: 40 },
-        { name: "토마토계란덮밥", price: 35 },
-        { name: "김치볶음밥", price: 35 },
-        { name: "계란볶음밥", price: 30 },
-        { name: "김밥", price: 23 },
-        { name: "양푼비빔밥", price: 40 },
-        { name: "김치삼겹살덮밥", price: 48 },
-        { name: "고등어구이", price: 45 },
+        { name: "불고기덮밥", cn: "烤肉盖饭", price: 40 },
+        { name: "제육덮밥", cn: "猪肉盖饭", price: 40 },
+        { name: "오징어덮밥", cn: "鱿鱼盖饭", price: 40 },
+        { name: "위샹로스덮밥", cn: "鱼香肉丝盖饭", price: 40 },
+        { name: "칭죠로스덮밥", cn: "青椒肉丝盖饭", price: 40 },
+        { name: "토마토계란덮밥", cn: "西红柿鸡蛋盖饭", price: 35 },
+        { name: "김치볶음밥", cn: "泡菜炒饭", price: 35 },
+        { name: "계란볶음밥", cn: "鸡蛋炒饭", price: 30 },
+        { name: "김밥", cn: "紫菜包饭", price: 23 },
+        { name: "양푼비빔밥", cn: "大盆拌饭", price: 40 },
+        { name: "김치삼겹살덮밥", cn: "泡菜五花肉盖饭", price: 48 },
+        { name: "고등어구이", cn: "烤鲭鱼", price: 45 },
       ],
     },
     {
       name: "찌개/탕류",
+      cn: "汤锅类",
       items: [
-        { name: "소갈비탕", price: 60 },
-        { name: "특색소탕", price: 48 },
-        { name: "떡만두국", price: 45 },
-        { name: "경복궁만두국", price: 45 },
-        { name: "경복궁 고기만두찜", price: 40 },
-        { name: "경복궁 군만두", price: 40 },
-        { name: "육개장", price: 45 },
-        { name: "순두부찌개", price: 35 },
-        { name: "도가니탕", price: 58 },
-        { name: "미역국", price: 40 },
-        { name: "동태찌개", price: 48 },
-        { name: "뼈다귀해장국", price: 45 },
-        { name: "계란찜", price: 28 },
-        { name: "반계탕", price: 48 },
-        { name: "김치찌개", price: 40 },
-        { name: "된장찌개", price: 35 },
-        { name: "청국장", price: 40 },
-        { name: "북어콩나물해장국", price: 40 },
-        { name: "고등어김치찌개", price: 48 },
-        { name: "설렁탕", price: 48 },
-        { name: "시레기해장국", price: 45 },
+        { name: "소갈비탕", cn: "牛排骨汤", price: 60 },
+        { name: "특색소탕", cn: "特色牛肉汤", price: 48 },
+        { name: "떡만두국", cn: "年糕饺子汤", price: 45 },
+        { name: "경복궁만두국", cn: "景福宫饺子汤", price: 45 },
+        { name: "경복궁 고기만두찜", cn: "景福宫蒸肉饺", price: 40 },
+        { name: "경복궁 군만두", cn: "景福宫煎饺", price: 40 },
+        { name: "육개장", cn: "辣牛肉汤", price: 45 },
+        { name: "순두부찌개", cn: "嫩豆腐汤", price: 35 },
+        { name: "도가니탕", cn: "牛膝骨汤", price: 58 },
+        { name: "미역국", cn: "海带汤", price: 40 },
+        { name: "동태찌개", cn: "明太鱼汤", price: 48 },
+        { name: "뼈다귀해장국", cn: "骨头醒酒汤", price: 45 },
+        { name: "계란찜", cn: "鸡蛋羹", price: 28 },
+        { name: "반계탕", cn: "半只参鸡汤", price: 48 },
+        { name: "김치찌개", cn: "泡菜汤", price: 40 },
+        { name: "된장찌개", cn: "大酱汤", price: 35 },
+        { name: "청국장", cn: "清麴酱汤", price: 40 },
+        { name: "북어콩나물해장국", cn: "干明太鱼豆芽醒酒汤", price: 40 },
+        { name: "고등어김치찌개", cn: "鲭鱼泡菜汤", price: 48 },
+        { name: "설렁탕", cn: "雪浓汤", price: 48 },
+        { name: "시레기해장국", cn: "萝卜缨醒酒汤", price: 45 },
       ],
     },
     {
       name: "육류",
+      cn: "肉类",
       items: [
-        { name: "AL갈비구이", price: 118 },
-        { name: "숯불 닭똥집구이", price: 80 },
-        { name: "숯불 닭갈비구이", price: 88 },
-        { name: "장어구이", price: 180 },
-        { name: "보쌈", price: 150 },
-        { name: "숯불돼지갈비", price: 88 },
-        { name: "솥뚜껑삼겹살", price: 75 },
-        { name: "소고기주물럭", price: 175 },
-        { name: "소갈비찜", price: 240 },
-        { name: "소고기파불고기", price: 150 },
-        { name: "소고기모듬", price: 435 },
+        { name: "AL갈비구이", cn: "AL烤牛排骨", price: 118 },
+        { name: "숯불 닭똥집구이", cn: "炭火烤鸡胗", price: 80 },
+        { name: "숯불 닭갈비구이", cn: "炭火烤鸡排", price: 88 },
+        { name: "장어구이", cn: "烤鳗鱼", price: 180 },
+        { name: "보쌈", cn: "煮五花肉", price: 150 },
+        { name: "숯불돼지갈비", cn: "炭火烤猪排", price: 88 },
+        { name: "솥뚜껑삼겹살", cn: "锅盖五花肉", price: 75 },
+        { name: "소고기주물럭", cn: "调味烤牛肉", price: 175 },
+        { name: "소갈비찜", cn: "炖牛排骨", price: 240 },
+        { name: "소고기파불고기", cn: "大葱烤牛肉", price: 150 },
+        { name: "소고기모듬", cn: "牛肉拼盘", price: 435 },
       ],
     },
     {
       name: "생고기",
+      cn: "生肉",
       items: [
-        { name: "고추장 불고기 주물럭", price: 100 },
-        { name: "등심", price: 170 },
-        { name: "꽃등심", price: 208 },
-        { name: "부채살", price: 128 },
+        { name: "고추장 불고기 주물럭", cn: "辣椒酱调味烤牛肉", price: 100 },
+        { name: "등심", cn: "牛里脊", price: 170 },
+        { name: "꽃등심", cn: "雪花牛里脊", price: 208 },
+        { name: "부채살", cn: "牛扇子肉", price: 128 },
       ],
     },
     {
       name: "석쇠구이",
+      cn: "炭网烤类",
       note: "저녁 한정",
       items: [
-        { name: "간장 석쇠구이", price: 60 },
-        { name: "고추장 석쇠구이", price: 60 },
+        { name: "간장 석쇠구이", cn: "酱油炭烤肉", price: 60 },
+        { name: "고추장 석쇠구이", cn: "辣椒酱炭烤肉", price: 60 },
       ],
     },
     {
       name: "중화요리",
+      cn: "中华料理",
       items: [
-        { name: "옛날탕수육", price: 88 },
-        { name: "팔보채", price: 120 },
-        { name: "짬뽕밥", price: 48 },
-        { name: "짜장밥", price: 35 },
+        { name: "옛날탕수육", cn: "老式糖醋肉", price: 88 },
+        { name: "팔보채", cn: "八宝菜", price: 120 },
+        { name: "짬뽕밥", cn: "海鲜辣汤饭", price: 48 },
+        { name: "짜장밥", cn: "炸酱饭", price: 35 },
       ],
     },
     {
       name: "계절메뉴",
+      cn: "季节菜单",
       items: [
-        { name: "냉면", price: 45 },
-        { name: "콩국수", price: 40 },
-        { name: "육쌈냉면", price: 78 },
-        { name: "해물전골", price: "시가" },
-        { name: "알밥", price: 48 },
+        { name: "냉면", cn: "冷面", price: 45 },
+        { name: "콩국수", cn: "豆浆面", price: 40 },
+        { name: "육쌈냉면", cn: "肉包冷面", price: 78 },
+        { name: "해물전골", cn: "海鲜锅", price: "시가" },
+        { name: "알밥", cn: "鱼籽饭", price: 48 },
       ],
     },
     {
       name: "볶음류",
+      cn: "炒菜类",
       items: [
-        { name: "제육볶음", price: 58 },
-        { name: "마파두부", price: 30 },
-        { name: "낙지볶음", price: 78 },
-        { name: "오징어볶음", price: 68 },
-        { name: "김치삼겹살볶음", price: 58 },
-        { name: "첸예두부", price: 48 },
-        { name: "건두부볶음", price: 30 },
-        { name: "부추계란볶음", price: 30 },
-        { name: "토마토계란볶음", price: 30 },
-        { name: "감자볶음", price: 35 },
-        { name: "양배추볶음", price: 30 },
-        { name: "마른고추소고기볶음", price: 88 },
-        { name: "닭똥집볶음", price: 40 },
+        { name: "제육볶음", cn: "炒猪肉片", price: 58 },
+        { name: "마파두부", cn: "麻婆豆腐", price: 30 },
+        { name: "낙지볶음", cn: "炒章鱼", price: 78 },
+        { name: "오징어볶음", cn: "炒鱿鱼", price: 68 },
+        { name: "김치삼겹살볶음", cn: "泡菜五花肉炒", price: 58 },
+        { name: "첸예두부", cn: "千页豆腐", price: 48 },
+        { name: "건두부볶음", cn: "炒豆干", price: 30 },
+        { name: "부추계란볶음", cn: "韭菜炒鸡蛋", price: 30 },
+        { name: "토마토계란볶음", cn: "西红柿炒鸡蛋", price: 30 },
+        { name: "감자볶음", cn: "炒土豆丝", price: 35 },
+        { name: "양배추볶음", cn: "炒卷心菜", price: 30 },
+        { name: "마른고추소고기볶음", cn: "干辣椒炒牛肉", price: 88 },
+        { name: "닭똥집볶음", cn: "炒鸡胗", price: 40 },
       ],
     },
     {
       name: "기타",
+      cn: "其他",
       items: [
-        { name: "오삼불고기", price: 85 },
-        { name: "간장게장", price: 120 },
-        { name: "양념게장", price: 68 },
-        { name: "두부김치", price: 50 },
-        { name: "경복궁 떡볶이", price: 35 },
-        { name: "잡채", price: 50 },
-        { name: "골뱅이무침", price: 118 },
-        { name: "계란말이", price: 28 },
-        { name: "수제왕돈까스", price: 60 },
-        { name: "철판오뎅", price: 80 },
+        { name: "오삼불고기", cn: "鱿鱼五花肉烤", price: 85 },
+        { name: "간장게장", cn: "酱油腌蟹", price: 120 },
+        { name: "양념게장", cn: "调味腌蟹", price: 68 },
+        { name: "두부김치", cn: "豆腐泡菜", price: 50 },
+        { name: "경복궁 떡볶이", cn: "景福宫炒年糕", price: 35 },
+        { name: "잡채", cn: "炒粉丝", price: 50 },
+        { name: "골뱅이무침", cn: "拌田螺", price: 118 },
+        { name: "계란말이", cn: "鸡蛋卷", price: 28 },
+        { name: "수제왕돈까스", cn: "手工大炸猪排", price: 60 },
+        { name: "철판오뎅", cn: "铁板鱼糕串", price: 80 },
       ],
     },
     {
       name: "면류",
+      cn: "面类",
       items: [
-        { name: "비빔국수", price: 38 },
-        { name: "쫄면", price: 40 },
-        { name: "열무국수", price: 40 },
-        { name: "잔치국수", price: 40 },
-        { name: "신라면", price: 25 },
-        { name: "해장라면", price: 35 },
+        { name: "비빔국수", cn: "拌面", price: 38 },
+        { name: "쫄면", cn: "拌粗面", price: 40 },
+        { name: "열무국수", cn: "萝卜缨冷汤面", price: 40 },
+        { name: "잔치국수", cn: "宴席面", price: 40 },
+        { name: "신라면", cn: "辛拉面", price: 25 },
+        { name: "해장라면", cn: "醒酒拉面", price: 35 },
       ],
     },
     {
       name: "전골/찜류",
+      cn: "锅炖类",
       items: [
-        { name: "우거지갈비전골 (대)", price: 150 },
-        { name: "우거지갈비전골 (중)", price: 120 },
-        { name: "동태전골 (대)", price: 130 },
-        { name: "동태전골 (중)", price: 100 },
-        { name: "고추장짜글이찌개", price: 100 },
-        { name: "능이백숙전골", price: 280 },
-        { name: "감자탕 (대)", price: 138 },
-        { name: "감자탕 (중)", price: 100 },
-        { name: "만두전골", price: 160 },
-        { name: "고등어김치찜전골", price: 140 },
-        { name: "돼지고기김치찜", price: 130 },
-        { name: "닭볶음탕", price: 140 },
-        { name: "부대찌개", price: 140 },
-        { name: "버섯전골", price: 120 },
-        { name: "흑대구전골", price: 288 },
-        { name: "소곱창전골", price: 198 },
-        { name: "북어해장전골", price: 120 },
-        { name: "동태찜", price: 150 },
+        { name: "우거지갈비전골 (대)", cn: "青菜排骨锅 (大)", price: 150 },
+        { name: "우거지갈비전골 (중)", cn: "青菜排骨锅 (中)", price: 120 },
+        { name: "동태전골 (대)", cn: "明太鱼锅 (大)", price: 130 },
+        { name: "동태전골 (중)", cn: "明太鱼锅 (中)", price: 100 },
+        { name: "고추장짜글이찌개", cn: "辣椒酱炖汤", price: 100 },
+        { name: "능이백숙전골", cn: "松菇炖鸡锅", price: 280 },
+        { name: "감자탕 (대)", cn: "猪脊骨汤 (大)", price: 138 },
+        { name: "감자탕 (중)", cn: "猪脊骨汤 (中)", price: 100 },
+        { name: "만두전골", cn: "饺子锅", price: 160 },
+        { name: "고등어김치찜전골", cn: "鲭鱼泡菜炖锅", price: 140 },
+        { name: "돼지고기김치찜", cn: "猪肉泡菜炖", price: 130 },
+        { name: "닭볶음탕", cn: "辣炒鸡块", price: 140 },
+        { name: "부대찌개", cn: "部队锅", price: 140 },
+        { name: "버섯전골", cn: "蘑菇锅", price: 120 },
+        { name: "흑대구전골", cn: "黑鳕鱼锅", price: 288 },
+        { name: "소곱창전골", cn: "牛肠锅", price: 198 },
+        { name: "북어해장전골", cn: "干明太鱼醒酒锅", price: 120 },
+        { name: "동태찜", cn: "炖明太鱼", price: 150 },
       ],
     },
     {
       name: "전류",
+      cn: "煎饼类",
       items: [
-        { name: "해물파전", price: 58 },
-        { name: "김치전", price: 48 },
-        { name: "깻잎전", price: 55 },
-        { name: "표고버섯전", price: 48 },
-        { name: "모듬전", price: 80 },
+        { name: "해물파전", cn: "海鲜葱饼", price: 58 },
+        { name: "김치전", cn: "泡菜饼", price: 48 },
+        { name: "깻잎전", cn: "苏子叶饼", price: 55 },
+        { name: "표고버섯전", cn: "香菇饼", price: 48 },
+        { name: "모듬전", cn: "什锦煎饼", price: 80 },
       ],
     },
     {
       name: "세트메뉴",
+      cn: "套餐",
       items: [
-        { name: "떡볶이 + 김밥", price: 50 },
-        { name: "떡볶이 + 김밥 + 군만두", price: 88 },
+        { name: "떡볶이 + 김밥", cn: "炒年糕+紫菜包饭", price: 50 },
+        { name: "떡볶이 + 김밥 + 군만두", cn: "炒年糕+紫菜包饭+煎饺", price: 88 },
+      ],
+    },
+  ],
+};
+
+</script>
+<script>
+// ============================================================
+//  란조라면 (穆蓝·兰州牛肉面) 메뉴 데이터 (lj.js)
+// ------------------------------------------------------------
+//  [수정 방법]
+//  · 메뉴 추가   : items 배열 안에 아래 한 줄 추가
+//      { name: "메뉴명(중국어)", desc: "메뉴 설명", price: 가격 }
+//  · 메뉴 삭제   : 해당 줄 삭제
+//  · 가격 변경   : price 숫자만 수정
+//  · desc(설명)  : 선택 항목 — 메뉴판에만 작은 글씨로 표시, 담은 메뉴엔 표시 안 됨
+//  · 분류 설명   : note: "설명"  (분류 제목 아래 작게 표시, 생략 가능)
+//  · 새 분류 추가: categories 배열에 { name: "분류명", cn: "中文", items: [...] } 추가
+// ============================================================
+
+const RESTAURANT_LJ = {
+  id: "lj",
+  name: "란조라면",
+  mark: "蘭",              // 로고 글자 (카드·아이콘에 표시)
+  tagline: "란저우 소고기면 · 穆蓝兰州牛肉面",
+  currency: "元",          // 화폐 단위 (예: "원", "¥", "元")
+  accent: "#b0542b",        // 브랜드 컬러 (버튼·강조색)
+  accent2: "#e0a13e",       // 그라데이션용 보조 컬러
+
+  categories: [
+    {
+      name: "볶음면",
+      cn: "炒面类",
+      items: [
+        { name: "간볜 볶음면 (干煸炒面)", desc: "수분 없이 바싹 볶은 고소한 볶음면", price: 18 },
+        { name: "계란 도삭면 볶음 (鸡蛋炒刀削面)", desc: "칼로 깎은 두툼한 면을 계란과 볶음", price: 17 },
+        { name: "소고기 볶음 수타면 (牛肉炒拉面)", desc: "수타면을 소고기·채소와 볶음", price: 17 },
+      ],
+    },
+    {
+      name: "만두",
+      cn: "饺子类",
+      items: [
+        { name: "소고기 물만두 (牛肉干饺)", desc: "삶아서 소스에 찍어 먹는 소고기 만두 (국물 없음)", price: 16 },
+      ],
+    },
+    {
+      name: "비빔면",
+      cn: "拌面类",
+      items: [
+        { name: "파기름 비빔면 (葱油拌面)", desc: "파기름·간장에 비비는 기본 비빔면", price: 17 },
+        { name: "감자 소고기 비빔면 (土豆牛肉拌面)", desc: "감자·소고기 조림을 얹은 비빔면", price: 20 },
+        { name: "자오마지 비빔면 (椒麻鸡拌面)", desc: "산초로 얼얼하게 무친 닭고기를 얹음", price: 20 },
+        { name: "새콤매콤 배추 비빔면 (酸辣白菜拌面)", desc: "식초·고추로 볶은 배추를 얹음", price: 16 },
+        { name: "감자채 비빔면 (土豆丝拌面)", desc: "감자채 볶음을 얹음", price: 16 },
+        { name: "목이버섯 고기볶음 비빔면 (木耳炒肉拌面)", desc: "목이버섯과 고기 볶음을 얹음", price: 17 },
+        { name: "대파 양고기 비빔면 (葱爆羊肉拌面)", desc: "대파와 양고기를 센 불에 볶아 얹음", price: 22 },
+        { name: "부추 계란 비빔면 (韭菜鸡蛋拌面)", desc: "부추 계란 볶음을 얹음", price: 16 },
+        { name: "토마토 계란 비빔면 (番茄鸡蛋拌面)", desc: "새콤달콤한 토마토 계란 볶음을 얹음", price: 17 },
+        { name: "닭고기 간장조림 비빔면 (红烧鸡块拌面)", desc: "간장에 조린 닭고기 토막을 얹음", price: 20 },
+        { name: "버섯 고기볶음 비빔면 (蘑菇炒肉拌面)", desc: "버섯과 고기 볶음을 얹음", price: 17 },
+        { name: "쯔란 소고기 비빔면 (孜然牛肉拌面)", desc: "쯔란(쿠민)으로 볶은 소고기를 얹음", price: 20 },
+        { name: "궈유러우 비빔면 (过油肉拌面)", desc: "기름에 데친 고기와 채소 볶음, 신장식", price: 25 },
+      ],
+    },
+    {
+      name: "덮밥",
+      cn: "盖饭类",
+      items: [
+        { name: "부추 계란 덮밥 (韭菜鸡蛋盖饭)", desc: "부추 계란 볶음 덮밥", price: 16 },
+        { name: "감자채 덮밥 (土豆丝盖饭)", desc: "감자채 볶음 덮밥", price: 16 },
+        { name: "닭고기 간장조림 덮밥 (红烧鸡块盖饭)", desc: "간장에 조린 닭고기 덮밥", price: 20 },
+        { name: "자오마지 덮밥 (椒麻鸡盖饭)", desc: "산초 양념 닭고기 덮밥", price: 20 },
+        { name: "대파 양고기 덮밥 (葱爆羊肉盖饭)", desc: "대파 양고기 볶음 덮밥", price: 22 },
+        { name: "버섯 고기볶음 덮밥 (蘑菇炒肉盖饭)", desc: "버섯 고기 볶음 덮밥", price: 17 },
+        { name: "쯔란 소고기 덮밥 (孜然牛肉盖饭)", desc: "쯔란 소고기 볶음 덮밥", price: 20 },
+        { name: "피망 고기볶음 덮밥 (青椒炒肉盖饭)", desc: "피망과 고기 볶음 덮밥", price: 18 },
+        { name: "새콤매콤 배추 덮밥 (酸辣白菜盖饭)", desc: "새콤매콤한 배추볶음 덮밥", price: 16 },
+        { name: "피망 계란 덮밥 (青椒鸡蛋盖饭)", desc: "피망 계란 볶음 덮밥", price: 17 },
+      ],
+    },
+    {
+      name: "볶음밥",
+      cn: "炒饭类",
+      items: [
+        { name: "란저우 볶음밥 (兰州炒饭)", desc: "가게 스타일 기본 볶음밥", price: 17 },
+        { name: "쏸차이 소고기 볶음밥 (酸菜牛肉炒饭)", desc: "중국식 절임배추와 소고기 볶음밥", price: 18 },
+        { name: "대표 계란볶음밥 (招牌蛋炒饭)", desc: "가장 저렴한 기본 계란볶음밥", price: 12 },
+        { name: "신장 쫘판 (新疆抓饭)", desc: "양고기·당근을 넣고 지은 신장식 기름밥", price: 25 },
+      ],
+    },
+    {
+      name: "국수",
+      cn: "汤面类",
+      items: [
+        { name: "소고기 파오모 (牛肉泡馍)", desc: "빵을 뜯어 소고기 국물에 말아 먹는 시안 요리", price: 22 },
+        { name: "소고기 당면탕 (牛肉粉丝汤)", desc: "소고기 국물에 당면", price: 20 },
+        { name: "새콤한 국물 물만두 (酸汤水饺)", desc: "식초·고추기름 국물 만두", price: 20 },
+        { name: "쏸차이 소고기 국수 (酸菜牛肉面)", desc: "절임배추를 넣은 새콤한 소고기 국수", price: 18 },
+        { name: "계란 볶음 수타면 (鸡蛋炒拉面)", desc: "국수 분류지만 실제는 볶음면", price: 17 },
+        { name: "매콤 소고기 국수 (香辣牛肉面)", desc: "고추기름으로 맵게 낸 소고기 국수", price: 20 },
+        { name: "소고기 후이몐 (牛肉烩面)", desc: "넓적한 면을 진한 국물에 끓인 허난식 국수", price: 20 },
+        { name: "소고기 물만두 (牛肉水饺)", desc: "국물에 담긴 소고기 만두", price: 16 },
+      ],
+    },
+    {
+      name: "요리",
+      cn: "特色菜",
+      items: [
+        { name: "새콤매콤 배추볶음 (酸辣白菜)", desc: "식초·고추로 볶은 배추", price: 22 },
+        { name: "대파 양고기 볶음 (葱爆羊肉)", desc: "대파와 양고기를 센 불에 볶음", price: 58 },
+        { name: "양파 소고기 볶음 (洋葱牛肉)", desc: "양파와 소고기 볶음", price: 38 },
+        { name: "양갈비 (羊排)", desc: "양갈비 (가격은 1대 단위)", price: 9.9 },
+        { name: "오이무침 (凉拌黄瓜)", desc: "마늘·식초로 무친 차가운 오이", price: 18 },
+        { name: "피망 감자채 볶음 (青椒土豆丝)", desc: "아삭한 감자채와 피망 볶음", price: 22 },
+        { name: "버섯 소고기 볶음 (蘑菇牛肉)", desc: "버섯과 소고기 볶음", price: 30 },
+        { name: "부추 계란 볶음 (韭菜鸡蛋)", desc: "부추와 계란 볶음", price: 22 },
+        { name: "대파 소고기 볶음 (葱爆牛肉)", desc: "대파와 소고기를 센 불에 볶음", price: 55 },
+        { name: "간궈 감자 (干锅土豆片)", desc: "작은 냄비에 매콤하게 볶은 얇은 감자", price: 50 },
+        { name: "감자채 무침 (凉拌土豆丝)", desc: "데친 감자채를 식초·고추로 무침", price: 18 },
+        { name: "소고기 간장조림 (红烧牛肉)", desc: "간장에 푹 조린 소고기", price: 50 },
+        { name: "쯔란 소고기 볶음 (孜然牛肉)", desc: "쿠민 향신료로 볶은 소고기", price: 55 },
+        { name: "피망 계란 볶음 (青椒炒蛋)", desc: "피망과 계란 볶음", price: 22 },
+        { name: "피망 소고기 볶음 (青椒炒牛肉)", desc: "피망과 소고기 볶음", price: 30 },
+        { name: "가지 간장조림 (红烧茄子)", desc: "간장 양념에 조린 가지", price: 30 },
+        { name: "신장 다판지 (新疆大盘鸡)", desc: "닭·감자를 매콤하게 조린 큰 접시, 3~4인분", price: 99 },
+        { name: "토마토 계란 볶음 (番茄鸡蛋)", desc: "새콤달콤한 토마토 계란 볶음", price: 22 },
+        { name: "이쑤시개 양고기 (牙签羊肉)", desc: "이쑤시개에 꽂아 쯔란으로 볶은 양고기", price: 65 },
+      ],
+    },
+    {
+      name: "기타·세트",
+      cn: "其他菜品",
+      items: [
+        { name: "대표 소고기 냉면 세트 (招牌牛肉凉面煎蛋可乐)", desc: "계란프라이·콜라 포함", price: 19.9 },
+        { name: "소고기 완자+계란프라이 (牛肉丸子煎蛋)", desc: "소고기 완자에 계란프라이", price: 25 },
+        { name: "즉석 소고기 꼬치 (现烤牛肉串)", desc: "바로 구운 소고기 꼬치", price: 18 },
+        { name: "양꼬치 4개 (羊肉串 4串)", desc: "양꼬치 4개", price: 24 },
+        { name: "청채 볶음 (素炒青菜)", desc: "녹색 채소 볶음", price: 30.88 },
+        { name: "소고기 수육 (白切牛肉)", desc: "삶아 얇게 썬 소고기", price: 15 },
+        { name: "쏸차이 소고기 국수 세트 (酸菜牛肉面+鸡腿+小菜+鸡蛋)", desc: "닭다리·반찬·계란 포함", price: 31 },
+        { name: "대표 감자 소고기 덮밥 (招牌土豆牛肉盖浇饭)", desc: "감자·소고기 조림 덮밥", price: 25 },
+        { name: "쯔란 소고기 덮밥 세트 (孜然牛肉盖饭+小菜+汽水+鸡蛋)", desc: "반찬·탄산음료·계란 포함", price: 28 },
+        { name: "소고기 수육+계란프라이 (白切牛肉+煎蛋)", desc: "수육에 계란프라이 추가", price: 30 },
+        { name: "체크인 이벤트 (打卡收藏)", desc: "가게 인증·즐겨찾기용 항목, 실제 음식 아님", price: 1 },
+        { name: "소고기 볶음 수타면+계란 (牛肉炒拉面鸡蛋)", desc: "소고기 볶음면에 계란 추가", price: 28.8 },
+        { name: "대표 소고기 냉비빔면 (招牌牛肉凉拌面)", desc: "차갑게 비벼 먹는 소고기 비빔면", price: 19 },
+        { name: "전통 소고기 국수+계란프라이 (传统牛肉面+煎蛋)", desc: "란저우식 맑은 소고기 국수에 계란 추가", price: 36 },
+        { name: "양꼬치 세트 (羊肉串+煎蛋+小菜)", desc: "계란프라이·반찬 포함", price: 76 },
+        { name: "메이퇀 공동구매 소고기 국수 (美团团购-牛肉面)", desc: "메이퇀 앱 공동구매 쿠폰 상품", price: 54.9 },
+      ],
+    },
+    {
+      name: "추가",
+      cn: "另加类",
+      items: [
+        { name: "소고기 양지 (牛腩)", desc: "푹 조린 양지, 대용량", price: 99 },
+        { name: "양념장 소고기 (料汁牛肉)", desc: "삶은 소고기에 양념장을 끼얹음", price: 25 },
+        { name: "자오마지 (椒麻鸡)", desc: "산초 양념 차가운 닭고기", price: 15 },
+        { name: "쯔란 빵 (孜然饼)", desc: "쿠민을 뿌려 구운 밀전병", price: 4 },
+        { name: "조림 완자 (卤味丸子)", desc: "간장 향신료에 조린 완자", price: 3 },
+        { name: "파전병 (葱油饼)", desc: "파를 넣고 구운 겹겹이 전병", price: 6 },
+        { name: "닭다리 튀김 (炸鸡腿)", desc: "튀긴 닭다리 1개", price: 8 },
+        { name: "요구르트 (酸奶)", desc: "중국식 요구르트", price: 9.9 },
+        { name: "러우자모 (肉夹馍)", desc: "다진 고기를 끼운 중국식 버거", price: 10 },
+        { name: "소시지 (香肠)", desc: "소시지 1개", price: 2 },
+        { name: "특제 반찬 (特色小菜)", desc: "곁들이는 밑반찬", price: 5 },
+        { name: "카오바오쯔 (烤包子)", desc: "양고기소를 넣은 신장식 화덕 군만두", price: 6 },
+      ],
+    },
+    {
+      name: "음료",
+      cn: "饮料类",
+      items: [
+        { name: "마이둥 (脉动)", desc: "비타민 이온음료", price: 5 },
+        { name: "우롱차 (乌龙茶)", desc: "병 우롱차", price: 6 },
+        { name: "아이스티 (冰红茶)", desc: "달달한 병 홍차 음료", price: 4 },
+        { name: "이바오 생수 (怡宝)", desc: "생수", price: 2 },
+        { name: "산사 음료 (山楂有礼)", desc: "새콤한 산사나무 열매 음료", price: 4 },
+        { name: "매실 녹차 (青梅绿茶)", desc: "매실 향 녹차 음료", price: 4 },
+        { name: "콜라 (병) (可乐瓶装)", desc: "병 콜라", price: 4 },
+        { name: "젠리바오 (健力宝)", desc: "오렌지맛 탄산 스포츠음료", price: 5 },
       ],
     },
   ],
@@ -1065,9 +1271,11 @@ const RESTAURANT_GBG = {
 /* ============================================================
    앱 상태
    ============================================================ */
-const RESTAURANTS = [RESTAURANT_HBG, RESTAURANT_GBG];
-let currentId = null;              // "hbg" | "gbg"
-const carts = load("menu-carts", { hbg: {}, gbg: {} }); // { id: { 이름: 수량 } }
+const RESTAURANTS = [RESTAURANT_HBG, RESTAURANT_GBG, RESTAURANT_LJ];
+let currentId = null;              // "hbg" | "gbg" | "lj"
+// 저장된 카트에 새 음식점 키가 없으면 보충 (기존 사용자 호환)
+const carts = load("menu-carts", {});
+for (const r of RESTAURANTS) if (!carts[r.id]) carts[r.id] = {};
 let themePref = load("menu-theme", null);               // "light" | "dark" | null(시스템)
 
 function load(key, fallback) {
@@ -1168,7 +1376,10 @@ function renderMenu(filter = "") {
   let found = 0;
 
   for (const cat of r.categories) {
-    const items = cat.items.filter(it => !q || it.name.toLowerCase().includes(q));
+    const items = cat.items.filter(it => !q ||
+      it.name.toLowerCase().includes(q) ||
+      (it.cn || "").toLowerCase().includes(q) ||
+      (it.desc || "").toLowerCase().includes(q));
     if (!items.length) continue;
     found += items.length;
 
@@ -1176,6 +1387,7 @@ function renderMenu(filter = "") {
       <section class="cat-section" id="cat-${encodeURIComponent(cat.name)}">
         <div class="cat-title-wrap">
           <h3 class="cat-title">${cat.name}</h3>
+          ${cat.cn ? `<span class="cat-cn">(${cat.cn})</span>` : ""}
           ${cat.note ? `<span class="cat-note">${cat.note}</span>` : ""}
         </div>
         <div class="menu-list">
@@ -1198,7 +1410,8 @@ function itemRow(it) {
   return `
     <div class="item ${qty ? "in-cart" : ""}" data-name="${escapeAttr(it.name)}">
       <div class="item-info">
-        <div class="item-name ${market ? "dim" : ""}">${it.name}</div>
+        <div class="item-name ${market ? "dim" : ""}">${it.name}${it.cn ? `<span class="item-cn">(${it.cn})</span>` : ""}</div>
+        ${it.desc ? `<div class="item-desc">${it.desc}</div>` : ""}
         <div class="item-price num ${market ? "" : "hot"}">${fmtPrice(it.price, rest().currency)}</div>
       </div>
       ${market
@@ -1241,7 +1454,7 @@ function bindItemButtons() {
 }
 
 function changeQty(name, delta) {
-  const c = carts[currentId];
+  const c = carts[currentId] || (carts[currentId] = {});
   const next = (c[name] || 0) + delta;
   if (next <= 0) delete c[name]; else c[name] = next;
   save("menu-carts", carts);
@@ -1335,7 +1548,7 @@ function renderCarts() {
     ? entries.map(e => `
         <div class="cart-item">
           <div class="ci-info">
-            <div class="ci-name">${e.item.name}</div>
+            <div class="ci-name">${e.item.name}${e.item.cn ? `<span class="ci-cn">(${e.item.cn})</span>` : ""}</div>
             <div class="ci-sub num">${fmtPrice(e.item.price, r.currency)} × ${e.qty} = ${fmtPrice(e.item.price * e.qty, r.currency)}</div>
           </div>
           ${stepperHtml(e.item.name, e.qty)}
@@ -1482,11 +1695,6 @@ addEventListener("resize", () => {
   measureTopbar();
   syncChips();
 });
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
-}
 </script>
 </body>
 </html>
