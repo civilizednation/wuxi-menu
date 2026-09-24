@@ -369,6 +369,41 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 .stepper svg { width: 14px; height: 14px; }
 
+/* 사진 메뉴판 (photoMenu) — 2열 사진 카드 */
+.photo-grid .menu-list.has-photo { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (min-width: 640px) { .photo-grid .menu-list.has-photo { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.photo-grid .has-photo .item {
+  flex-direction: column; align-items: stretch; gap: 8px;
+  padding: 8px 8px 10px;
+}
+.item-photo {
+  display: block; width: 100%; aspect-ratio: 1;
+  border-radius: 10px; overflow: hidden;
+  background: var(--surface-2);
+  cursor: zoom-in;
+}
+.item-photo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.photo-grid .has-photo .item-info { flex: none; padding: 0 2px; }
+.photo-grid .has-photo .item-cn { display: block; margin-left: 0; }
+.photo-grid .has-photo .add-btn { width: 100%; height: 40px; border-radius: 12px; margin-top: auto; }
+.photo-grid .has-photo .stepper { justify-content: space-between; margin-top: auto; }
+.photo-grid .has-photo .stepper button { height: 40px; }
+
+/* 사진 크게 보기 */
+.lightbox {
+  position: fixed; inset: 0; z-index: 70;
+  display: grid; place-items: center; padding: 20px;
+  background: rgba(10, 12, 16, .82);
+}
+.lightbox[hidden] { display: none; }
+.lightbox figure { margin: 0; max-width: 560px; width: 100%; text-align: center; color: #fff; }
+.lightbox img {
+  width: 100%; max-height: 70vh; object-fit: contain;
+  border-radius: 16px; background: #f4f1ea;
+}
+.lightbox figcaption { margin-top: 12px; font-size: 17px; font-weight: 700; }
+.lightbox figcaption span { display: block; font-size: 13px; font-weight: 400; opacity: .75; margin-top: 2px; }
+
 /* 검색 결과 없음 */
 .no-result {
   padding: 60px 20px; text-align: center; color: var(--muted);
@@ -651,6 +686,14 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     </div>
   </div>
 </section>
+
+<!-- 사진 크게 보기 -->
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-label="메뉴 사진">
+  <figure>
+    <img id="lightbox-img" alt="">
+    <figcaption id="lightbox-cap"></figcaption>
+  </figure>
+</div>
 
 <script>
 // ============================================================
@@ -1276,6 +1319,301 @@ const RESTAURANT_LJ = {
 </script>
 <script>
 // ============================================================
+//  경복궁(사진) 메뉴 데이터 (gbgp.js) — 매장 사진 메뉴판 기준
+// ------------------------------------------------------------
+//  [수정 방법]
+//  · 메뉴 추가   : items 배열 안에 아래 한 줄 추가
+//      { name: "메뉴명", cn: "中文名", price: 가격, img: "photos/gbg/파일명.webp" }
+//  · img(사진)   : 선택 항목 — 있으면 사진 카드로 표시, 사진을 누르면 크게 보기
+//  · 시가 메뉴   : price: "시가"  (주문 담기가 비활성화 됨)
+//  · desc(설명)  : 선택 항목 — 메뉴판에만 작은 글씨로 표시
+//  · photoMenu   : true 이면 사진 카드(2열) 레이아웃으로 표시
+// ============================================================
+
+const RESTAURANT_GBGP = {
+  id: "gbgp",
+  name: "경복궁(사진)",
+  mark: "宮",              // 로고 글자 (카드·아이콘에 표시)
+  tagline: "사진 보고 고르는 메뉴판 · 한식",
+  currency: "元",          // 화폐 단위 (예: "원", "¥", "元")
+  accent: "#1e5f8f",        // 브랜드 컬러 (버튼·강조색)
+  accent2: "#c99a3c",       // 그라데이션용 보조 컬러
+  photoMenu: true,
+
+  categories: [
+    {
+      name: "고기류",
+      cn: "碳烤类",
+      items: [
+        { name: "숯불닭똥집구이", cn: "碳烤鸡胗", price: 80, img: "photos/gbg/g001.webp" },
+        { name: "숯불닭갈비구이", cn: "碳烤鸡排", price: 88, img: "photos/gbg/g002.webp" },
+        { name: "소고기주물럭", cn: "秘制牛肋条", price: 175, desc: "300g", img: "photos/gbg/g003.webp" },
+        { name: "LA갈비", cn: "LA牛排", price: 118, desc: "200g", img: "photos/gbg/g004.webp" },
+        { name: "숯불돼지갈비", cn: "碳烤猪排", price: 88, img: "photos/gbg/g005.webp" },
+        { name: "솥뚜껑삼겹살", cn: "铁锅五花肉", price: 75, desc: "200g · 2인분 이상 주문 가능", img: "photos/gbg/g006.webp" },
+        { name: "솥뚜껑볶음밥 추가", cn: "铁锅炒饭", price: 20, desc: "솥뚜껑삼겹살 후 볶음밥 추가", img: "photos/gbg/g006.webp" },
+        { name: "부채살", cn: "扇骨肉", price: 128, desc: "170g", img: "photos/gbg/g007.webp" },
+        { name: "꽃등심", cn: "雪花肉", price: 208, desc: "150g", img: "photos/gbg/g008.webp" },
+        { name: "등심", cn: "牛里脊", price: 170, desc: "170g", img: "photos/gbg/g009.webp" },
+      ],
+    },
+    {
+      name: "볶음류",
+      cn: "炒菜类",
+      items: [
+        { name: "부추계란볶음", cn: "韭菜炒鸡蛋", price: 30, img: "photos/gbg/g010.webp" },
+        { name: "양배추볶음", cn: "炒包菜", price: 30, img: "photos/gbg/g011.webp" },
+        { name: "제육볶음", cn: "炒五花肉", price: 58, img: "photos/gbg/g012.webp" },
+        { name: "낙지볶음", cn: "炒章鱼", price: 78, img: "photos/gbg/g013.webp" },
+        { name: "팔보채", cn: "八宝菜", price: 120, img: "photos/gbg/g014.webp" },
+        { name: "김치삼겹살볶음", cn: "泡菜炒五花肉", price: 58, img: "photos/gbg/g015.webp" },
+        { name: "잡채볶음", cn: "炒杂菜", price: 50, img: "photos/gbg/g016.webp" },
+        { name: "건두부볶음", cn: "青椒干豆腐", price: 30, img: "photos/gbg/g017.webp" },
+        { name: "닭똥집볶음", cn: "炒鸡胗", price: 40, img: "photos/gbg/g018.webp" },
+        { name: "마른고추소고기볶음", cn: "干辣椒炒牛肉", price: 88, img: "photos/gbg/g019.webp" },
+        { name: "마파두부", cn: "麻婆豆腐", price: 30, img: "photos/gbg/g020.webp" },
+        { name: "감자볶음", cn: "辣炒土豆片", price: 35, img: "photos/gbg/g021.webp" },
+        { name: "토마토계란볶음", cn: "番茄炒鸡蛋", price: 30, img: "photos/gbg/g022.webp" },
+        { name: "두부김치", cn: "豆腐泡菜", price: 50, img: "photos/gbg/g023.webp" },
+        { name: "오삼불고기", cn: "炒五花肉鱿鱼", price: 85, img: "photos/gbg/g024.webp" },
+        { name: "오징어볶음", cn: "辣炒鱿鱼", price: 68, img: "photos/gbg/g025.webp" },
+        { name: "첸예두부", cn: "千叶豆腐", price: 48, img: "photos/gbg/g026.webp" },
+        { name: "샹라러우스", cn: "香辣肉丝", price: 68, img: "photos/gbg/g027.webp" },
+        { name: "칭죠러우스", cn: "青椒肉丝", price: 68, img: "photos/gbg/g028.webp" },
+        { name: "위샹러우스", cn: "鱼香肉丝", price: 68, img: "photos/gbg/g029.webp" },
+        { name: "철판두부", cn: "铁板豆腐", price: 38, img: "photos/gbg/g030.webp" },
+        { name: "철판계란", cn: "铁板鸡蛋", price: 28, img: "photos/gbg/g031.webp" },
+      ],
+    },
+    {
+      name: "일품요리",
+      cn: "一品料理",
+      items: [
+        { name: "철판오뎅", cn: "铁板鱼饼", price: 80, img: "photos/gbg/g032.webp" },
+        { name: "보쌈", cn: "包猪肉", price: 150, img: "photos/gbg/g033.webp" },
+        { name: "장어구이", cn: "烤鳗鱼", price: 180, img: "photos/gbg/g034.webp" },
+        { name: "고등어구이", cn: "烤青鱼", price: 45, img: "photos/gbg/g035.webp" },
+        { name: "간장게장", cn: "酱油酱蟹", price: 120, img: "photos/gbg/g036.webp" },
+        { name: "양념게장", cn: "香辣蟹", price: 68, img: "photos/gbg/g037.webp" },
+        { name: "소갈비찜", cn: "焖牛排", price: 240, desc: "2~3인분", img: "photos/gbg/g038.webp" },
+        { name: "동태찜", cn: "焖明太鱼", price: 150, img: "photos/gbg/g039.webp" },
+        { name: "골뱅이무침", cn: "辣拌海螺", price: 118, img: "photos/gbg/g040.webp" },
+      ],
+    },
+    {
+      name: "전골류",
+      cn: "火锅类",
+      items: [
+        { name: "북어해장전골", cn: "干明太鱼解酒火锅", price: 120, img: "photos/gbg/g041.webp" },
+        { name: "우거지갈비전골 (중)", cn: "排骨大酱火锅", price: 120, desc: "中份", img: "photos/gbg/g042.webp" },
+        { name: "우거지갈비전골 (대)", cn: "排骨大酱火锅", price: 150, desc: "大份", img: "photos/gbg/g042.webp" },
+        { name: "부대찌개", cn: "部队火锅", price: 140, img: "photos/gbg/g043.webp" },
+        { name: "고추장짜글이찌개", cn: "猪肉辣椒酱火锅", price: 100, img: "photos/gbg/g044.webp" },
+        { name: "감자탕전골 (중)", cn: "土豆猪排火锅", price: 100, desc: "中份", img: "photos/gbg/g045.webp" },
+        { name: "감자탕전골 (대)", cn: "土豆猪排火锅", price: 138, desc: "大份", img: "photos/gbg/g045.webp" },
+        { name: "동태전골 (중)", cn: "明太鱼火锅", price: 100, desc: "中份", img: "photos/gbg/g046.webp" },
+        { name: "동태전골 (대)", cn: "明太鱼火锅", price: 130, desc: "大份", img: "photos/gbg/g046.webp" },
+        { name: "고등어김치찜전골", cn: "青鱼炖泡菜", price: 140, img: "photos/gbg/g047.webp" },
+        { name: "버섯전골", cn: "蘑菇火锅", price: 120, img: "photos/gbg/g048.webp" },
+        { name: "만두전골", cn: "饺子火锅", price: 160, img: "photos/gbg/g049.webp" },
+        { name: "소곱창전골", cn: "牛肠火锅", price: 198, img: "photos/gbg/g050.webp" },
+        { name: "닭볶음탕", cn: "辣炖鸡块", price: 140, img: "photos/gbg/g051.webp" },
+        { name: "돼지고기김치찜", cn: "五花肉炖泡菜", price: 130, img: "photos/gbg/g052.webp" },
+        { name: "흑대구전골", cn: "鸦片鱼火锅", price: 288, img: "photos/gbg/g053.webp" },
+        { name: "해물전골", cn: "海鲜火锅", price: 320, img: "photos/gbg/g054.webp" },
+      ],
+    },
+    {
+      name: "특색요리",
+      cn: "特色类",
+      items: [
+        { name: "해신능이백숙전골", cn: "海鲜虎掌菇锅巴火锅", price: 550, desc: "2시간 전 예약", img: "photos/gbg/g055.webp" },
+        { name: "능이백숙전골", cn: "虎掌菇锅巴火锅", price: 280, desc: "2시간 전 예약", img: "photos/gbg/g055.webp" },
+        { name: "생고기고추장불고기주물럭", cn: "生辣椒酱烤肉", price: 100, img: "photos/gbg/g056.webp" },
+        { name: "소고기파불고기", cn: "传统烤牛肉", price: 150, desc: "2~3인분", img: "photos/gbg/g057.webp" },
+      ],
+    },
+    {
+      name: "전류",
+      cn: "饼类",
+      items: [
+        { name: "깻잎전", cn: "苏子叶饼", price: 55, img: "photos/gbg/g058.webp" },
+        { name: "표고버섯전", cn: "香菇饼", price: 48, img: "photos/gbg/g059.webp" },
+        { name: "해물파전", cn: "海鲜葱饼", price: 58, img: "photos/gbg/g060.webp" },
+        { name: "김치전", cn: "泡菜饼", price: 48, img: "photos/gbg/g061.webp" },
+        { name: "모듬전", cn: "什锦饼拼盘", price: 80, img: "photos/gbg/g062.webp" },
+      ],
+    },
+    {
+      name: "분식류",
+      cn: "小吃类",
+      items: [
+        { name: "분식세트 A (떡볶이+김밥)", cn: "紫菜包饭+炒年糕", price: 50, img: "photos/gbg/g063.webp" },
+        { name: "분식세트 B (떡볶이+김밥+군만두)", cn: "紫菜包饭+炒年糕+煎饺", price: 80, img: "photos/gbg/g064.webp" },
+        { name: "수제왕돈까스", cn: "炸手工大猪排", price: 60, img: "photos/gbg/g065.webp" },
+        { name: "계란말이", cn: "鸡蛋卷", price: 28, img: "photos/gbg/g066.webp" },
+        { name: "계란찜", cn: "鸡蛋糕", price: 28, img: "photos/gbg/g067.webp" },
+      ],
+    },
+    {
+      name: "찌개류",
+      cn: "汤类",
+      items: [
+        { name: "소갈비탕", cn: "牛排汤", price: 60, img: "photos/gbg/g068.webp" },
+        { name: "청국장", cn: "清国酱", price: 40, img: "photos/gbg/g069.webp" },
+        { name: "된장찌개", cn: "大酱汤", price: 35, img: "photos/gbg/g070.webp" },
+        { name: "뼈다귀해장국", cn: "骨头解酒汤", price: 45, img: "photos/gbg/g071.webp" },
+        { name: "육개장", cn: "辣牛肉汤", price: 45, img: "photos/gbg/g072.webp" },
+        { name: "짬뽕탕", cn: "海鲜辣汤", price: 48, img: "photos/gbg/g073.webp" },
+        { name: "도가니탕", cn: "牛蹄筋汤", price: 58, img: "photos/gbg/g074.webp" },
+        { name: "순두부찌개", cn: "嫩豆腐汤", price: 35, img: "photos/gbg/g075.webp" },
+        { name: "김치찌개", cn: "泡菜汤", price: 40, img: "photos/gbg/g076.webp" },
+        { name: "고등어김치찌개", cn: "青鱼泡菜汤", price: 48, img: "photos/gbg/g077.webp" },
+        { name: "동태찌개", cn: "明太鱼汤", price: 48, img: "photos/gbg/g078.webp" },
+        { name: "특색소탕", cn: "特色牛肉汤", price: 48, img: "photos/gbg/g079.webp" },
+        { name: "시라지해장국", cn: "牛肉解酒汤", price: 45, img: "photos/gbg/g080.webp" },
+        { name: "설렁탕", cn: "牛肉汤", price: 48, img: "photos/gbg/g081.webp" },
+        { name: "북어콩나물해장국", cn: "干明太鱼豆芽汤", price: 40, img: "photos/gbg/g082.webp" },
+        { name: "반계탕", cn: "半鸡汤", price: 48, img: "photos/gbg/g083.webp" },
+        { name: "떡만두국", cn: "特色年糕饺子汤", price: 45, img: "photos/gbg/g084.webp" },
+        { name: "경복궁만두국", cn: "特色饺子汤", price: 45, desc: "김치·고기만두 선택 가능", img: "photos/gbg/g085.webp" },
+      ],
+    },
+    {
+      name: "덮밥류",
+      cn: "盖饭类",
+      items: [
+        { name: "김치삼겹살덮밥", cn: "泡菜五花肉盖饭", price: 48, img: "photos/gbg/g086.webp" },
+        { name: "제육덮밥", cn: "猪肉盖饭", price: 40, img: "photos/gbg/g087.webp" },
+        { name: "오징어덮밥", cn: "鱿鱼盖饭", price: 40, img: "photos/gbg/g088.webp" },
+        { name: "샹라로스덮밥", cn: "香辣肉丝盖饭", price: 40, img: "photos/gbg/g089.webp" },
+        { name: "위샹로스덮밥", cn: "鱼香肉丝盖饭", price: 40, img: "photos/gbg/g090.webp" },
+        { name: "칭죠로스덮밥", cn: "青椒肉丝盖饭", price: 40, img: "photos/gbg/g091.webp" },
+        { name: "불고기덮밥", cn: "烤肉盖饭", price: 40, img: "photos/gbg/g092.webp" },
+        { name: "짜장밥", cn: "杂酱饭", price: 35, img: "photos/gbg/g093.webp" },
+        { name: "토마토계란덮밥", cn: "西红柿鸡蛋盖饭", price: 35, img: "photos/gbg/g094.webp" },
+      ],
+    },
+    {
+      name: "주식류",
+      cn: "主食类",
+      items: [
+        { name: "김치볶음밥", cn: "泡菜炒饭", price: 35, img: "photos/gbg/g095.webp" },
+        { name: "계란볶음밥", cn: "鸡蛋炒饭", price: 30, img: "photos/gbg/g096.webp" },
+        { name: "양푼비빔밥", cn: "拌饭", price: 40, img: "photos/gbg/g097.webp" },
+        { name: "돌솥비빔밥", cn: "石锅拌饭", price: 40, img: "photos/gbg/g098.webp" },
+        { name: "알밥", cn: "鱼籽饭", price: 48, img: "photos/gbg/g099.webp" },
+        { name: "떡볶이", cn: "炒年糕", price: 35, img: "photos/gbg/g100.webp" },
+        { name: "김밥", cn: "紫菜包饭", price: 23, img: "photos/gbg/g101.webp" },
+        { name: "참치김밥", cn: "金枪鱼紫菜包饭", price: 30, img: "photos/gbg/g101.webp" },
+        { name: "불고기김밥", cn: "牛肉紫菜包饭", price: 30, img: "photos/gbg/g101.webp" },
+        { name: "군만두", cn: "煎饺", price: 40, img: "photos/gbg/g102.webp" },
+        { name: "만두찜", cn: "蒸饺", price: 40, img: "photos/gbg/g103.webp" },
+      ],
+    },
+    {
+      name: "면류",
+      cn: "面类",
+      items: [
+        { name: "비빔국수", cn: "拌面", price: 38, img: "photos/gbg/g104.webp" },
+        { name: "쫄면", cn: "筋面", price: 40, img: "photos/gbg/g105.webp" },
+        { name: "냉면", cn: "冷面", price: 45, img: "photos/gbg/g106.webp" },
+        { name: "육쌈냉면", cn: "冷面套餐", price: 78, img: "photos/gbg/g106.webp" },
+        { name: "냉모밀", cn: "冷荞麦面", price: 50, img: "photos/gbg/g107.webp" },
+        { name: "잔치국수", cn: "喜宴面", price: 40, img: "photos/gbg/g108.webp" },
+        { name: "콩국수", cn: "豆浆面", price: 40, img: "photos/gbg/g109.webp" },
+        { name: "신라면", cn: "辛拉面", price: 25, img: "photos/gbg/g110.webp" },
+        { name: "해장라면", cn: "解酒拉面", price: 35, img: "photos/gbg/g111.webp" },
+      ],
+    },
+    {
+      name: "쌈밥류",
+      cn: "包饭类",
+      note: "2인분 기준 찌개 1개 / 3인분 기준 찌개 2개 제공",
+      items: [
+        { name: "보쌈쌈밥", cn: "五花肉包饭", price: 58, desc: "보쌈+모둠쌈+된장찌개 · 2인분 이상", img: "photos/gbg/g112.webp" },
+        { name: "간장돼지불고기쌈밥", cn: "酱油烤猪肉包饭", price: 58, desc: "돼지불고기+모둠쌈+된장찌개", img: "photos/gbg/g113.webp" },
+        { name: "제육쌈밥", cn: "猪肉包饭", price: 58, desc: "제육볶음+모둠쌈+된장찌개", img: "photos/gbg/g114.webp" },
+        { name: "고등어정식쌈밥", cn: "青鱼定食包饭", price: 60, desc: "고등어구이+모둠쌈+된장찌개", img: "photos/gbg/g115.webp" },
+        { name: "간장석쇠구이", cn: "酱油烤肉包饭", price: 60, desc: "간장불고기+모둠쌈+(청국장 or 된장찌개) · 2인분 이상", img: "photos/gbg/g116.webp" },
+        { name: "고추장석쇠구이", cn: "辣椒酱烤肉包饭", price: 60, desc: "고추장불고기+모둠쌈+(청국장 or 된장찌개) · 2인분 이상", img: "photos/gbg/g117.webp" },
+      ],
+    },
+    {
+      name: "저녁메뉴",
+      cn: "晚餐料理",
+      note: "저녁 한정",
+      items: [
+        { name: "광어회", cn: "左口刺身", price: 260, img: "photos/gbg/g118.webp" },
+        { name: "감성돔회", cn: "金雕刺身", price: 260, img: "photos/gbg/g119.webp" },
+        { name: "우럭회", cn: "银斑刺身", price: 400, img: "photos/gbg/g120.webp" },
+        { name: "전복버터구이", cn: "黄油鲍鱼", price: 58, img: "photos/gbg/g121.webp" },
+        { name: "홍어삼합", cn: "鳐鱼三合", price: 200, img: "photos/gbg/g122.webp" },
+        { name: "생참다랑어회", cn: "冰鲜蓝旗金枪鱼", price: "시가", img: "photos/gbg/g123.webp" },
+        { name: "참다랑어뱃살회", cn: "金枪鱼大腩刺身", price: "시가", img: "photos/gbg/g124.webp" },
+        { name: "해물통갈치조림", cn: "济州带鱼海鲜", price: 428, img: "photos/gbg/g125.webp" },
+        { name: "산낙지육회", cn: "活章鱼生拌牛肉", price: 150, img: "photos/gbg/g126.webp" },
+        { name: "아구찜", cn: "辣炖安康鱼", price: "시가", img: "photos/gbg/g127.webp" },
+        { name: "생대구전골", cn: "大口鱼火锅", price: "시가", desc: "계절메뉴", img: "photos/gbg/g128.webp" },
+        { name: "옛날탕수육", cn: "糖醋肉", price: 88, img: "photos/gbg/g129.webp" },
+      ],
+    },
+    {
+      name: "소주",
+      cn: "烧酒",
+      items: [
+        { name: "진로이즈백", cn: "真露(白瓶)", price: 35 },
+        { name: "진로", cn: "真露", price: 35 },
+        { name: "처음처럼", cn: "初饮初乐", price: 35 },
+        { name: "과일맛소주", cn: "果味烧酒", price: 35 },
+        { name: "한라산", cn: "汉拿山", price: 35 },
+        { name: "좋은데이", cn: "好天好饮", price: 35 },
+        { name: "새로", cn: "九尾狐", price: 40 },
+        { name: "백세주", cn: "百岁酒", price: 50 },
+        { name: "청하", cn: "清河", price: 60 },
+        { name: "복분자", cn: "覆盆子果酒", price: 110 },
+      ],
+    },
+    {
+      name: "백주",
+      cn: "白酒",
+      items: [
+        { name: "몽즈란M6", cn: "梦之蓝M6", price: "시가" },
+        { name: "몽즈란M3", cn: "梦之蓝M3", price: "시가" },
+        { name: "국연", cn: "国缘", price: "시가" },
+        { name: "설원 (5년)", cn: "雪原(5年)", price: 58 },
+        { name: "설원 (10년)", cn: "雪原(10年)", price: 78 },
+      ],
+    },
+    {
+      name: "맥주",
+      cn: "啤酒",
+      items: [
+        { name: "칭따오 순생", cn: "青岛纯生", price: 15 },
+        { name: "칭따오 맥주", cn: "青岛经典", price: 10 },
+      ],
+    },
+    {
+      name: "음료",
+      cn: "饮料",
+      items: [
+        { name: "한국음료", cn: "韩国饮料", price: 10 },
+        { name: "밀키스", cn: "牛奶雪碧", price: 10 },
+        { name: "콜라", cn: "可乐", price: 8 },
+        { name: "콜라 (대병)", cn: "可乐大瓶", price: 20 },
+        { name: "사이다", cn: "雪碧", price: 8 },
+        { name: "사이다 (대병)", cn: "雪碧大瓶", price: 20 },
+        { name: "환타", cn: "芬达", price: 8 },
+        { name: "코코넛쥬스", cn: "椰汁", price: 10 },
+        { name: "왕로지", cn: "王老吉", price: 8 },
+      ],
+    },
+  ],
+};
+
+</script>
+<script>
+// ============================================================
 //  지스김밥 (Ji's Café) 메뉴 데이터 (jis.js)
 // ------------------------------------------------------------
 //  [수정 방법]
@@ -1351,8 +1689,8 @@ const RESTAURANT_JIS = {
 /* ============================================================
    앱 상태
    ============================================================ */
-const RESTAURANTS = [RESTAURANT_HBG, RESTAURANT_GBG, RESTAURANT_LJ, RESTAURANT_JIS];
-let currentId = null;              // "hbg" | "gbg" | "lj" | "jis"
+const RESTAURANTS = [RESTAURANT_HBG, RESTAURANT_GBG, RESTAURANT_GBGP, RESTAURANT_LJ, RESTAURANT_JIS];
+let currentId = null;              // "hbg" | "gbg" | "gbgp" | "lj" | "jis"
 // 저장된 카트에 새 음식점 키가 없으면 보충 (기존 사용자 호환)
 const carts = load("menu-carts", {});
 for (const r of RESTAURANTS) if (!carts[r.id]) carts[r.id] = {};
@@ -1470,12 +1808,13 @@ function renderMenu(filter = "") {
           ${cat.cn ? `<span class="cat-cn">(${cat.cn})</span>` : ""}
           ${cat.note ? `<span class="cat-note">${cat.note}</span>` : ""}
         </div>
-        <div class="menu-list">
+        <div class="menu-list ${r.photoMenu && items.some(it => it.img) ? "has-photo" : ""}">
           ${items.map(it => itemRow(it)).join("")}
         </div>
       </section>`;
   }
 
+  $("menu-body").classList.toggle("photo-grid", !!r.photoMenu);
   $("menu-body").innerHTML =
     found ? sectionsHtml
           : `<div class="no-result">"${filter}"에 해당하는 메뉴가 없습니다.</div>`;
@@ -1489,6 +1828,11 @@ function itemRow(it) {
   const qty = carts[currentId][it.name] || 0;
   return `
     <div class="item ${qty ? "in-cart" : ""}" data-name="${escapeAttr(it.name)}">
+      ${it.img && rest().photoMenu
+        ? `<button class="item-photo" data-zoom="${escapeAttr(it.name)}" aria-label="${escapeAttr(it.name)} 사진 크게 보기">
+             <img src="${it.img}" alt="" loading="lazy" decoding="async">
+           </button>`
+        : ""}
       <div class="item-info">
         <div class="item-name ${market ? "dim" : ""}">${it.name}${it.cn ? `<span class="item-cn">(${it.cn})</span>` : ""}</div>
         ${it.desc ? `<div class="item-desc">${it.desc}</div>` : ""}
@@ -1525,6 +1869,8 @@ function escapeAttr(s) { return s.replace(/"/g, "&quot;").replace(/</g, "&lt;");
    수량 변경 / 카트 갱신
    ============================================================ */
 function bindItemButtons() {
+  $("menu-body").querySelectorAll("[data-zoom]").forEach(b =>
+    b.addEventListener("click", () => openPhoto(b.dataset.zoom)));
   $("menu-body").querySelectorAll("[data-add]").forEach(b =>
     b.addEventListener("click", () => changeQty(b.dataset.add, +1)));
   $("menu-body").querySelectorAll("[data-plus]").forEach(b =>
@@ -1543,6 +1889,19 @@ function changeQty(name, delta) {
 }
 
 /* 이름으로 아이템 카드의 컨트롤만 부분 갱신 (전체 리렌더 X) */
+function openPhoto(name) {
+  const it = findItem(name);
+  if (!it || !it.img) return;
+  $("lightbox-img").src = it.img;
+  $("lightbox-img").alt = it.name;
+  $("lightbox-cap").innerHTML =
+    `${it.name} · ${fmtPrice(it.price, rest().currency)}${it.cn ? `<span>${it.cn}</span>` : ""}`;
+  $("lightbox").hidden = false;
+}
+function closePhoto() { $("lightbox").hidden = true; }
+$("lightbox").addEventListener("click", closePhoto);
+document.addEventListener("keydown", e => { if (e.key === "Escape") closePhoto(); });
+
 function updateItemStates() {
   const c = carts[currentId];
   document.querySelectorAll("#menu-body .item").forEach(row => {

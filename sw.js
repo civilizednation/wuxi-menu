@@ -1,5 +1,5 @@
-// 설치형(PWA) 앱용 서비스 워커: 페이지는 네트워크 우선, 아이콘 등은 캐시 우선
-const CACHE = "wuxi-menu-v1";
+// 설치형(PWA) 앱용 서비스 워커: 페이지는 네트워크 우선, 아이콘·사진 등은 캐시 우선
+const CACHE = "wuxi-menu-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -36,5 +36,14 @@ self.addEventListener("fetch", (e) => {
     );
     return;
   }
-  e.respondWith(caches.match(req).then((hit) => hit || fetch(req)));
+  // 메뉴 사진 등은 한 번 받은 뒤 캐시에 저장 → 오프라인에서도 표시
+  e.respondWith(
+    caches.match(req).then((hit) => hit || fetch(req).then((res) => {
+      if (res.ok) {
+        const copy = res.clone();
+        caches.open(CACHE).then((c) => c.put(req, copy));
+      }
+      return res;
+    }))
+  );
 });
