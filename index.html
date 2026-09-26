@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>홍보각 · 경복궁 · 란조라면 · 지스김밥 메뉴 주문 (단일파일)</title>
+<title>청학골 · 홍보각 · 경복궁 · 란조라면 · 지스김밥 메뉴 주문</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -271,12 +271,14 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   scroll-margin-top: 16px;
 }
 .cat-title-wrap {
-  display: flex; align-items: baseline; gap: 10px;
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
   padding: 10px 2px 12px;
 }
 .cat-title {
   font-size: 17px; font-weight: 900; letter-spacing: -.01em;
+  white-space: nowrap;
 }
+.cat-cn { white-space: nowrap; }
 .cat-title::before {
   content: ""; display: inline-block;
   width: 8px; height: 8px; border-radius: 3px;
@@ -695,6 +697,153 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   </figure>
 </div>
 
+<script>
+// ============================================================
+//  청학골 (青鹤谷) 메뉴 데이터 (chg.js) — 매장 사진 메뉴판 기준
+// ------------------------------------------------------------
+//  [수정 방법]
+//  · 메뉴 추가   : items 배열 안에 아래 한 줄 추가
+//      { name: "메뉴명", cn: "中文名", price: 가격, img: "photos/chg/파일명.webp" }
+//  · img(사진)   : 선택 항목 — 있으면 사진 카드로 표시, 사진을 누르면 크게 보기
+//  · desc(설명)  : 선택 항목 — 메뉴판에만 작은 글씨로 표시
+//  · photoMenu   : true 이면 사진 카드(2열) 레이아웃으로 표시
+// ============================================================
+
+const RESTAURANT_CHG = {
+  id: "chg",
+  name: "청학골",
+  mark: "鶴",              // 로고 글자 (카드·아이콘에 표시)
+  tagline: "한식 · 숯불구이 · 青鹤谷",
+  currency: "元",          // 화폐 단위 (예: "원", "¥", "元")
+  accent: "#2f6f5e",        // 브랜드 컬러 (버튼·강조색)
+  accent2: "#d9a441",       // 그라데이션용 보조 컬러
+  photoMenu: true,
+
+  categories: [
+    {
+      name: "구이 (소고기)",
+      cn: "牛肉烧烤",
+      items: [
+        { name: "청학골 특선모듬", cn: "青鹤谷特选代表作", price: 486, desc: "750g · 소양념갈비+궁중왕갈비+삼겹살", img: "photos/chg/c01.webp" },
+        { name: "소양념갈비", cn: "拌牛排", price: 308, desc: "300g", img: "photos/chg/c02.webp" },
+        { name: "꽃살", cn: "花肉", price: 318, desc: "150g", img: "photos/chg/c03.webp" },
+        { name: "생갈비", cn: "生牛排", price: 308, desc: "300g", img: "photos/chg/c04.webp" },
+        { name: "갈비본살", cn: "肩胛小排", price: 238, desc: "150g", img: "photos/chg/c05.webp" },
+        { name: "갈빗살", cn: "牛排骨肉", price: 148, desc: "150g", img: "photos/chg/c06.webp" },
+        { name: "갈빗살주물럭", cn: "拌牛排骨肉", price: 148, desc: "150g", img: "photos/chg/c07.webp" },
+        { name: "우삼겹", cn: "拌牛五花肉", price: 108, desc: "150g", img: "photos/chg/c08.webp" },
+        { name: "우설", cn: "牛舌", price: 108, desc: "140g", img: "photos/chg/c09.webp" },
+        { name: "양념우설", cn: "拌牛舌", price: 108, desc: "140g", img: "photos/chg/c10.webp" },
+        { name: "사랑채불고기", cn: "烤牛肉锅", price: 178, desc: "500g · 2인분", img: "photos/chg/c11.webp" },
+      ],
+    },
+    {
+      name: "구이 (돼지고기)",
+      cn: "猪肉烧烤",
+      items: [
+        { name: "궁중왕갈비", cn: "宫中拌猪排", price: 99, desc: "280g", img: "photos/chg/c12.webp" },
+        { name: "삼겹살", cn: "五花肉", price: 79, desc: "170g", img: "photos/chg/c13.webp" },
+        { name: "목살소금구이", cn: "椒盐烤梅肉", price: 79, desc: "170g", img: "photos/chg/c14.webp" },
+        { name: "버섯모둠", cn: "蘑菇拼盘", price: 59, desc: "250g", img: "photos/chg/c15.webp" },
+      ],
+    },
+    {
+      name: "점심특선",
+      cn: "精選午餐",
+      note: "평일 11:30~14:00 (토·일·공휴일 제외)",
+      items: [
+        { name: "숯불쌈밥", cn: "烤肉包饭", price: 65, img: "photos/chg/c16.webp" },
+        { name: "제육덮밥", cn: "辣炒猪肉盖饭", price: 65, img: "photos/chg/c17.webp" },
+      ],
+    },
+    {
+      name: "요리",
+      cn: "料理",
+      items: [
+        { name: "떡잡채", cn: "米糕杂菜", price: 69, img: "photos/chg/c18.webp" },
+        { name: "두부김치", cn: "泡菜炒豆腐", price: 69, img: "photos/chg/c19.webp" },
+        { name: "떡볶이", cn: "辣炒年糕", price: 45, img: "photos/chg/c20.webp" },
+        { name: "제육볶음", cn: "辣炒猪肉", price: 85, img: "photos/chg/c21.webp" },
+        { name: "치즈계란말이", cn: "奶酪鸡蛋卷", price: 55, img: "photos/chg/c22.webp" },
+        { name: "계란찜", cn: "鸡蛋糕", price: 35, img: "photos/chg/c23.webp" },
+      ],
+    },
+    {
+      name: "전",
+      cn: "煎饼类",
+      items: [
+        { name: "녹두빈대떡", cn: "绿豆饼", price: 65, img: "photos/chg/c24.webp" },
+        { name: "해물파전", cn: "海鲜葱饼", price: 85, img: "photos/chg/c25.webp" },
+        { name: "김치전", cn: "泡菜饼", price: 65, img: "photos/chg/c26.webp" },
+      ],
+    },
+    {
+      name: "찌개·탕",
+      cn: "汤类",
+      items: [
+        { name: "부대찌개", cn: "部队火锅", price: 169, desc: "2인분", img: "photos/chg/c27.webp" },
+        { name: "시골식김치찌개", cn: "乡村泡菜汤", price: 45, img: "photos/chg/c28.webp" },
+        { name: "된장찌개", cn: "大酱汤", price: 45, img: "photos/chg/c29.webp" },
+        { name: "소고기해장국", cn: "香辣牛肉汤", price: 65, img: "photos/chg/c30.webp" },
+        { name: "순두부찌개", cn: "嫩豆腐汤", price: 49, img: "photos/chg/c31.webp" },
+        { name: "청국장", cn: "清麴酱", price: 45, img: "photos/chg/c32.webp" },
+        { name: "콩비지찌개", cn: "石锅豆酱", price: 45, img: "photos/chg/c33.webp" },
+        { name: "궁중갈비탕", cn: "宫中牛排骨汤", price: 79, img: "photos/chg/c34.webp" },
+      ],
+    },
+    {
+      name: "식사",
+      cn: "主食",
+      items: [
+        { name: "전주비빔밥", cn: "全州拌饭", price: 45, img: "photos/chg/c35.webp" },
+        { name: "돌솥비빔밥", cn: "石锅拌饭", price: 45, img: "photos/chg/c36.webp" },
+        { name: "청학골 비빔냉면", cn: "青鹤谷拌冷面", price: 45, img: "photos/chg/c37.webp" },
+        { name: "청학골 물냉면", cn: "青鹤谷水冷面", price: 45, img: "photos/chg/c38.webp" },
+        { name: "콩국수", cn: "豆浆面", price: 45, desc: "여름메뉴 (5~9월)", img: "photos/chg/c39.webp" },
+        { name: "잔치국수", cn: "喜面", price: 35, img: "photos/chg/c40.webp" },
+        { name: "김치신라면", cn: "泡菜辛拉面", price: 39, img: "photos/chg/c41.webp" },
+      ],
+    },
+    {
+      name: "주류",
+      cn: "酒水",
+      items: [
+        { name: "청도순생맥주", cn: "青岛纯生啤酒", price: 20 },
+        { name: "청도맥주", cn: "青岛啤酒", price: 15 },
+        { name: "버드와이저", cn: "百威啤酒", price: 20 },
+        { name: "참이슬 / 처음처럼 / 한라산", cn: "真露 / 初饮初乐 / 汉拿山", price: 40 },
+        { name: "과일소주 (석류/블루베리)", cn: "水果烧酒 (石榴/蓝莓)", price: 40 },
+        { name: "보해복분자", cn: "宝海覆盆子", price: 118 },
+        { name: "청하", cn: "清河", price: 45 },
+        { name: "국순당막걸리", cn: "米酒", price: 50 },
+        { name: "홍초", cn: "红醋", price: 18, desc: "50ml" },
+        { name: "오량액", cn: "五粮液", price: 1788 },
+        { name: "몽지란", cn: "梦之蓝", price: 798 },
+        { name: "천지란", cn: "天之蓝", price: 598 },
+        { name: "해지란", cn: "海之蓝", price: 398 },
+        { name: "소호도선 한근", cn: "小糊涂仙 一斤", price: 298, desc: "500ml" },
+        { name: "소호도선 반근", cn: "小糊涂仙 半斤", price: 168, desc: "250ml" },
+        { name: "오량춘", cn: "五粮醇", price: 98 },
+        { name: "설원 (8년)", cn: "雪原 (8年)", price: 98 },
+      ],
+    },
+    {
+      name: "음료",
+      cn: "饮料",
+      items: [
+        { name: "콜라 / 사이다", cn: "可乐 / 雪碧", price: 10 },
+        { name: "광천수 (생수)", cn: "矿泉水", price: 10 },
+        { name: "페리에 (오리지널)", cn: "巴黎水", price: 28 },
+        { name: "바나나우유", cn: "香蕉牛奶", price: 18 },
+        { name: "한국음료 (포도/오렌지)", cn: "韩国饮料 (葡萄汁/橙汁)", price: 10 },
+        { name: "가다보", cn: "加多宝", price: 10 },
+        { name: "야자", cn: "椰奶", price: 15 },
+      ],
+    },
+  ],
+};
+
+</script>
 <script>
 // ============================================================
 //  홍보각 중화요리 메뉴 데이터 (hbg.js)
@@ -1689,8 +1838,8 @@ const RESTAURANT_JIS = {
 /* ============================================================
    앱 상태
    ============================================================ */
-const RESTAURANTS = [RESTAURANT_HBG, RESTAURANT_GBG, RESTAURANT_GBGP, RESTAURANT_LJ, RESTAURANT_JIS];
-let currentId = null;              // "hbg" | "gbg" | "gbgp" | "lj" | "jis"
+const RESTAURANTS = [RESTAURANT_CHG, RESTAURANT_HBG, RESTAURANT_GBG, RESTAURANT_GBGP, RESTAURANT_LJ, RESTAURANT_JIS];
+let currentId = null;              // "chg" | "hbg" | "gbg" | "gbgp" | "lj" | "jis"
 // 저장된 카트에 새 음식점 키가 없으면 보충 (기존 사용자 호환)
 const carts = load("menu-carts", {});
 for (const r of RESTAURANTS) if (!carts[r.id]) carts[r.id] = {};
