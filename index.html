@@ -1309,6 +1309,13 @@ const RESTAURANT_LJ = {
 
   categories: [
     {
+      name: "대표메뉴",
+      cn: "招牌",
+      items: [
+        { name: "대표 소고기 국수 (招牌牛肉面)", desc: "가게 대표 메뉴, 란저우식 맑은 소고기 국수", price: 20 },
+      ],
+    },
+    {
       name: "볶음면",
       cn: "炒面类",
       items: [
@@ -1373,6 +1380,7 @@ const RESTAURANT_LJ = {
       name: "국수",
       cn: "汤面类",
       items: [
+        { name: "대표 소고기 국수 (招牌牛肉面)", desc: "가게 대표 메뉴, 란저우식 맑은 소고기 국수", price: 20 },
         { name: "소고기 파오모 (牛肉泡馍)", desc: "빵을 뜯어 소고기 국물에 말아 먹는 시안 요리", price: 22 },
         { name: "소고기 당면탕 (牛肉粉丝汤)", desc: "소고기 국물에 당면", price: 20 },
         { name: "새콤한 국물 물만두 (酸汤水饺)", desc: "식초·고추기름 국물 만두", price: 20 },
@@ -1871,7 +1879,8 @@ function isMarket(v) { return typeof v !== "number"; }
    ============================================================ */
 function renderHome() {
   $("home-cards").innerHTML = RESTAURANTS.map(r => {
-    const count = r.categories.reduce((n, c) => n + c.items.length, 0);
+    // 같은 메뉴가 여러 분류(예: 대표메뉴)에 있어도 한 번만 셈
+    const count = new Set(r.categories.flatMap(c => c.items.map(i => i.name))).size;
     return `
       <button class="rest-card" data-id="${r.id}"
               style="--rc-accent:${r.accent}; --rc-accent-2:${r.accent2}">
