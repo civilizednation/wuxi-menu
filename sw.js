@@ -1,5 +1,5 @@
 // 설치형(PWA) 앱용 서비스 워커: 페이지는 네트워크 우선, 아이콘·사진 등은 캐시 우선
-const CACHE = "wuxi-menu-v2";
+const CACHE = "wuxi-menu-v3";
 const ASSETS = [
   "./",
   "./index.html",
@@ -23,16 +23,20 @@ self.addEventListener("activate", (e) => {
 
 self.addEventListener("fetch", (e) => {
   const req = e.request;
-  if (req.method !== "GET" || new URL(req.url).origin !== location.origin) return;
-  if (req.mode === "navigate") {
+  const url = new URL(req.url);
+  if (req.method !== "GET" || url.origin !== location.origin) return;
+  // 페이지(HTML)는 항상 최신 우선 — hg/ 같은 전용 주소가 불러오는 index.html 포함
+  if (req.mode === "navigate" || url.pathname.endsWith("/") || url.pathname.endsWith(".html")) {
     e.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put("./index.html", copy));
+          if (res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(req, copy));
+          }
           return res;
         })
-        .catch(() => caches.match("./index.html"))
+        .catch(() => caches.match(req, { ignoreSearch: true }).then((hit) => hit || caches.match("./index.html")))
     );
     return;
   }

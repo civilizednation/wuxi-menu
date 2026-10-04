@@ -187,6 +187,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   transition: transform .12s ease;
 }
 .btn-back:active { transform: scale(.92); }
+.single-mode .btn-back { display: none; }   /* 단일 음식점 모드에선 음식점 선택으로 못 돌아감 */
 .topbar-title { flex: 1; min-width: 0; }
 .topbar-name { font-size: 17px; font-weight: 900; line-height: 1.2; }
 .topbar-tag { font-size: 12px; color: var(--muted); font-weight: 500; }
@@ -2441,6 +2442,13 @@ function clearCart() {
 
 applyTheme();
 renderHome();
+
+/* 단일 음식점 모드: hg/ 처럼 음식점 전용 주소로 열면(window.MENU_ONLY) 그 음식점만 표시 */
+if (window.MENU_ONLY && RESTAURANTS.some(r => r.id === window.MENU_ONLY)) {
+  document.documentElement.classList.add("single-mode");
+  openRestaurant(window.MENU_ONLY);
+  document.title = `${rest().name} 메뉴`;
+}
 measureTopbar();
 addEventListener("resize", () => {
   measureTopbar();
