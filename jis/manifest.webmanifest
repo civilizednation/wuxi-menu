@@ -1,12 +1,12 @@
 {
-  "name": "한궈 고기집 메뉴",
-  "short_name": "한궈 고기집",
+  "name": "지스김밥 메뉴",
+  "short_name": "지스김밥",
   "lang": "ko",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#eef0f4",
-  "theme_color": "#8b3a1e",
+  "theme_color": "#2f7d4f",
   "icons": [
     {
       "src": "../icons/icon-192.png",

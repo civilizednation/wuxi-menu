@@ -1,12 +1,12 @@
 {
-  "name": "한궈 고기집 메뉴",
-  "short_name": "한궈 고기집",
+  "name": "경복궁 메뉴",
+  "short_name": "경복궁",
   "lang": "ko",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#eef0f4",
-  "theme_color": "#8b3a1e",
+  "theme_color": "#1e5f8f",
   "icons": [
     {
       "src": "../icons/icon-192.png",

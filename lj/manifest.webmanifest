@@ -1,12 +1,12 @@
 {
-  "name": "한궈 고기집 메뉴",
-  "short_name": "한궈 고기집",
+  "name": "란조라면 메뉴",
+  "short_name": "란조라면",
   "lang": "ko",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#eef0f4",
-  "theme_color": "#8b3a1e",
+  "theme_color": "#b0542b",
   "icons": [
     {
       "src": "../icons/icon-192.png",

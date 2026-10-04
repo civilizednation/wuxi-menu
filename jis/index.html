@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>한궈 고기집 메뉴</title>
-<meta name="theme-color" content="#8b3a1e">
+<title>지스김밥 메뉴</title>
+<meta name="theme-color" content="#2f7d4f">
 <style>body{margin:0;background:#eef0f4}@media(prefers-color-scheme:dark){body{background:#0e1014}}</style>
 </head>
 <body>
 <script>
 // ============================================================
-//  한궈 고기집 전용 주소 (…/wuxi-menu/hg/)
+//  지스김밥 전용 주소 (…/wuxi-menu/jis/)
 // ------------------------------------------------------------
 //  메뉴 데이터·화면은 상위 폴더의 index.html 하나만 관리합니다.
-//  이 파일은 그 index.html을 불러와 "한궈 고기집만 보기" 모드로 띄웁니다.
+//  이 파일은 그 index.html을 불러와 "지스김밥만 보기" 모드로 띄웁니다.
 //  · 다른 음식점 전용 주소를 만들려면 이 폴더를 복사하고 ONLY·NAME 값만 바꾸세요
 //    (음식점 id: chg / hbg / gbg / hg / lj / jis)
 // ============================================================
-const ONLY = "hg";
-const NAME = "한궈 고기집";
+const ONLY = "jis";
+const NAME = "지스김밥";
 fetch("../index.html", { cache: "no-cache" })
   .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
   .then(html => {
