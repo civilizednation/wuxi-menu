@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>청학골 · 홍보각 · 경복궁 · 한궈 고기집 · 란조라면 · 지스김밥 메뉴 주문</title>
+<title>청학골 · 홍보각 · 경복궁 · 한궈 고기집 · 만석 닭강정 · 란조라면 · 지스김밥 메뉴 주문</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -1210,6 +1210,138 @@ const RESTAURANT_HG = {
 </script>
 <script>
 // ============================================================
+//  만석 닭강정 (MANSUK CHICKEN · 满石炸鸡) 메뉴 데이터 (ms.js) — 매장 사진 메뉴판 기준
+// ------------------------------------------------------------
+//  [수정 방법]
+//  · 메뉴 추가   : items 배열 안에 아래 한 줄 추가
+//      { name: "메뉴명", cn: "中文名", price: 가격, img: "photos/ms/파일명.webp" }
+//  · img(사진)   : 선택 항목 — 있으면 사진 카드로 표시, 사진을 누르면 크게 보기
+//  · desc(설명)  : 선택 항목 — 메뉴판에만 작은 글씨로 표시
+//  · photoMenu   : true 이면 사진 카드(2열) 레이아웃으로 표시
+// ============================================================
+
+const RESTAURANT_MS = {
+  id: "ms",
+  name: "만석 닭강정",
+  mark: "满",              // 로고 글자 (카드·아이콘에 표시)
+  tagline: "닭강정 · 치킨 · 满石炸鸡",
+  currency: "元",          // 화폐 단위 (예: "원", "¥", "元")
+  accent: "#c8102e",        // 브랜드 컬러 (버튼·강조색)
+  accent2: "#f2a33a",       // 그라데이션용 보조 컬러
+  photoMenu: true,
+
+  categories: [
+    {
+      name: "치킨",
+      cn: "炸鸡",
+      items: [
+        { name: "닭강정 (반마리)", cn: "满石辣炸鸡丁 (半只)", price: 65, img: "photos/ms/m01.webp" },
+        { name: "닭강정 (한마리)", cn: "满石辣炸鸡丁 (一只)", price: 120, img: "photos/ms/m01.webp" },
+        { name: "숯불치킨 (반마리)", cn: "炭烤鸡肉 (半只)", price: 60, desc: "소금 / 양념 중 선택", img: "photos/ms/m02.webp" },
+        { name: "숯불치킨 (한마리)", cn: "炭烤鸡肉 (一只)", price: 100, desc: "소금 / 양념 중 선택", img: "photos/ms/m02.webp" },
+        { name: "뼈있는 치킨 (반마리)", cn: "有骨炸鸡 (半只)", price: 60, desc: "후라이드 / 양념 / 간장 / 마늘 중 선택", img: "photos/ms/m03.webp" },
+        { name: "뼈있는 치킨 (한마리)", cn: "有骨炸鸡 (一只)", price: 100, desc: "후라이드 / 양념 / 간장 / 마늘 중 선택", img: "photos/ms/m03.webp" },
+        { name: "순살치킨 (반마리)", cn: "无骨炸鸡 (半只)", price: 60, desc: "후라이드 / 양념 / 간장 / 마늘 중 선택", img: "photos/ms/m04.webp" },
+        { name: "순살치킨 (한마리)", cn: "无骨炸鸡 (一只)", price: 100, desc: "후라이드 / 양념 / 간장 / 마늘 중 선택", img: "photos/ms/m04.webp" },
+        { name: "반반반", cn: "三拼炸鸡", price: 140, desc: "세 가지 맛 선택", img: "photos/ms/m05.webp" },
+        { name: "파닭 (반마리)", cn: "葱丝鸡 (半只)", price: 65, img: "photos/ms/m06.webp" },
+        { name: "파닭 (한마리)", cn: "葱丝鸡 (一只)", price: 110, img: "photos/ms/m06.webp" },
+        { name: "레드윙", cn: "火辣鸡翅", price: 48, img: "photos/ms/m07.webp" },
+        { name: "마늘 닭똥집 튀김", cn: "大蒜鸡胗", price: 65, img: "photos/ms/m08.webp" },
+        { name: "숯불 닭꼬치 (1꼬치)", cn: "炭烤鸡肉串 (1串)", price: 15, desc: "소금 / 양념 중 선택", img: "photos/ms/m09.webp" },
+        { name: "숯불 닭꼬치 (5꼬치)", cn: "炭烤鸡肉串 (5串)", price: 60, desc: "소금 / 양념 중 선택", img: "photos/ms/m09.webp" },
+      ],
+    },
+    {
+      name: "매운 요리",
+      cn: "火辣料理",
+      items: [
+        { name: "매운 불족발닭발", cn: "火辣猪蹄鸡爪", price: 140, desc: "중간 매운맛 / 아주 매운맛", img: "photos/ms/m10.webp" },
+        { name: "매운 불닭발", cn: "火辣鸡爪", price: 78, desc: "중간 매운맛 / 아주 매운맛", img: "photos/ms/m11.webp" },
+        { name: "매운 불족발", cn: "火辣猪蹄", price: 78, desc: "중간 매운맛 / 아주 매운맛", img: "photos/ms/m12.webp" },
+        { name: "리얼 불닭볶음면", cn: "正宗火鸡面", price: 42, img: "photos/ms/m13.webp" },
+      ],
+    },
+    {
+      name: "요리",
+      cn: "料理",
+      items: [
+        { name: "떡볶이 세트", cn: "炒年糕套餐", price: 58, img: "photos/ms/m14.webp" },
+        { name: "제육볶음", cn: "辣炒猪肉", price: 48, img: "photos/ms/m15.webp" },
+        { name: "떡볶이", cn: "炒年糕", price: 18, img: "photos/ms/m16.webp" },
+        { name: "닭발", cn: "炒鸡爪", price: 80, img: "photos/ms/m17.webp" },
+        { name: "순대볶음", cn: "炒米肠", price: 88, img: "photos/ms/m18.webp" },
+        { name: "골뱅이무침", cn: "拌海螺", price: 95, img: "photos/ms/m19.webp" },
+        { name: "두부김치", cn: "泡菜豆腐", price: 38, img: "photos/ms/m20.webp" },
+        { name: "쏘야", cn: "香肠炒素菜", price: 48, img: "photos/ms/m21.webp" },
+        { name: "탕수육", cn: "糖醋肉", price: 58, img: "photos/ms/m22.webp" },
+      ],
+    },
+    {
+      name: "탕·전골",
+      cn: "汤 · 火锅",
+      items: [
+        { name: "닭볶음탕", cn: "炖鸡块汤", price: 120, desc: "순살 선택 가능", img: "photos/ms/m23.webp" },
+        { name: "안동찜닭", cn: "安东鸡", price: 120, desc: "순살 선택 가능", img: "photos/ms/m24.webp" },
+        { name: "김치찌개 전골", cn: "猪肉泡菜火锅", price: 88, img: "photos/ms/m25.webp" },
+        { name: "참치 김치찌개 전골", cn: "金枪鱼泡菜火锅", price: 88, img: "photos/ms/m26.webp" },
+        { name: "곱도리탕", cn: "炖鸡牛肠汤", price: 180, img: "photos/ms/m27.webp" },
+        { name: "짬뽕탕 (술국)", cn: "海鲜汤", price: 88, img: "photos/ms/m28.webp" },
+        { name: "어묵탕 (중)", cn: "鱼饼汤 (中)", price: 65, img: "photos/ms/m29.webp" },
+        { name: "어묵탕 (대)", cn: "鱼饼汤 (大)", price: 100, img: "photos/ms/m29.webp" },
+        { name: "면 추가", cn: "加面", price: 10, desc: "우동면 / 신라면" },
+        { name: "공기밥", cn: "米饭", price: 5 },
+      ],
+    },
+    {
+      name: "식사",
+      cn: "主食",
+      items: [
+        { name: "순살치킨 카레덮밥", cn: "鸡肉咖喱盖饭", price: 35, img: "photos/ms/m30.webp" },
+        { name: "김치볶음밥", cn: "泡菜炒饭", price: 35, img: "photos/ms/m31.webp" },
+        { name: "신라면", cn: "辛拉面", price: 25, img: "photos/ms/m32.webp" },
+      ],
+    },
+    {
+      name: "사이드",
+      cn: "小吃",
+      items: [
+        { name: "철판 콘치즈", cn: "奶酪玉米粒", price: 38, img: "photos/ms/m33.webp" },
+        { name: "치즈볼", cn: "芝士球", price: 25, img: "photos/ms/m34.webp" },
+        { name: "계란찜", cn: "鸡蛋羹", price: 30, img: "photos/ms/m35.webp" },
+        { name: "계란말이", cn: "鸡蛋卷", price: 35, img: "photos/ms/m36.webp" },
+        { name: "주먹밥", cn: "饭团", price: 18, img: "photos/ms/m37.webp" },
+        { name: "분홍소시지", cn: "煎香肠", price: 28, img: "photos/ms/m38.webp" },
+        { name: "김말이 튀김", cn: "紫菜粉丝卷", price: 22, img: "photos/ms/m39.webp" },
+        { name: "돈가스", cn: "猪排", price: 55, img: "photos/ms/m40.webp" },
+        { name: "감자튀김", cn: "炸薯条", price: 35, img: "photos/ms/m41.webp" },
+        { name: "나초", cn: "墨西哥玉米片", price: 48, img: "photos/ms/m42.webp" },
+      ],
+    },
+    {
+      name: "마른안주",
+      cn: "干货下酒菜",
+      items: [
+        { name: "숯불 노가리", cn: "碳烤小明太鱼", price: 70, img: "photos/ms/m43.webp" },
+        { name: "숯불 반건오징어", cn: "碳烤鱿鱼", price: 80, img: "photos/ms/m44.webp" },
+        { name: "참쥐포", cn: "烤马面鱼", price: 53, img: "photos/ms/m45.webp" },
+        { name: "한치", cn: "小鱿鱼", price: 65, img: "photos/ms/m46.webp" },
+      ],
+    },
+    {
+      name: "디저트",
+      cn: "甜品",
+      items: [
+        { name: "팥빙수", cn: "红豆冰沙", price: 28, img: "photos/ms/m47.webp" },
+        { name: "황도", cn: "黄桃", price: 28, img: "photos/ms/m48.webp" },
+      ],
+    },
+  ],
+};
+
+</script>
+<script>
+// ============================================================
 //  란조라면 (穆蓝·兰州牛肉面) 메뉴 데이터 (lj.js)
 // ------------------------------------------------------------
 //  [수정 방법]
@@ -1769,8 +1901,8 @@ const RESTAURANT_JIS = {
 /* ============================================================
    앱 상태
    ============================================================ */
-const RESTAURANTS = [RESTAURANT_CHG, RESTAURANT_HBG, RESTAURANT_GBG, RESTAURANT_HG, RESTAURANT_LJ, RESTAURANT_JIS];
-let currentId = null;              // "chg" | "hbg" | "gbg" | "hg" | "lj" | "jis"
+const RESTAURANTS = [RESTAURANT_CHG, RESTAURANT_HBG, RESTAURANT_GBG, RESTAURANT_HG, RESTAURANT_MS, RESTAURANT_LJ, RESTAURANT_JIS];
+let currentId = null;              // "chg" | "hbg" | "gbg" | "hg" | "ms" | "lj" | "jis"
 // 저장된 카트에 새 음식점 키가 없으면 보충 (기존 사용자 호환)
 const carts = load("menu-carts", {});
 for (const r of RESTAURANTS) if (!carts[r.id]) carts[r.id] = {};
